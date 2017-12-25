@@ -4,14 +4,15 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "concurrently \"ng serve\" \"npm run server:watch\"",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "server:build":"tsc -p tsconfig.server.json",
-    "server:execute":"node dist/out-tsc-server/src/app/server/server.js",
-    "server:start":"npm run server:build && npm run server:execute"
+    "server:build": "tsc -p tsconfig.server.json",
+    "server:execute": "node dist-server/src/app/server/server.js",
+    "server:start": "npm run server:build && npm run server:execute",
+    "server:watch": "concurrently \"tsc -P tsconfig.server.json -w\" \"nodemon dist-server/src/app/server/server.js --ignore /appData --ignore /dist\""
   },
   "private": true,
   "dependencies": {
@@ -43,6 +44,7 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
     "codelyzer": "~3.2.0",
+    "concurrently": "^3.5.1",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
@@ -51,6 +53,7 @@
     "karma-coverage-istanbul-reporter": "^1.2.1",
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "nodemon": "^1.14.3",
     "protractor": "~5.1.2",
     "ts-node": "~3.2.0",
     "tslint": "~5.7.0",
