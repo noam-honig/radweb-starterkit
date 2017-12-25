@@ -1,4 +1,5 @@
 import { environment } from './../../environments/environment';
+import * as models from './../models';
 import * as express from 'express';
 import * as radweb from 'radweb';
 import { SQLServerDataProvider, ExpressBridge } from 'radweb/server';
