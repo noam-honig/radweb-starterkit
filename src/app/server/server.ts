@@ -9,8 +9,9 @@ let port = 3000;
 let sqlServer = new SQLServerDataProvider('sa', 'MASTERKEY', '127.0.0.1', 'northwind', 'sqlexpress');
 environment.dataSource = sqlServer;
 
-let eb = new ExpressBridge(app, '/dataApi');
-eb.addSqlDevHelpers(sqlServer);
+let eb = new ExpressBridge(app);
+let dataApi = eb.addArea('/dataApi');
+dataApi.addSqlDevHelpers(sqlServer);
 
 app.route('/').get((req, res) => res.send('hello world'));
 
