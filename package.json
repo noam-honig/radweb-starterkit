@@ -5,11 +5,11 @@
   "scripts": {
     "ng": "ng",
     "ng-serve": "ng serve",
-    "start":"npm run server:execute",
-    "start_old":"ts-node --project tsconfig.server.json src/app/server/server.ts",
+    "start": "npm run server:execute",
+    "start_old": "ts-node --project tsconfig.server.json src/app/server/server.ts",
     "start_dev": "concurrently \"ng serve\" \"npm run server:watch\"",
     "build": "ng build",
-    "postinstall":"npm run server:build",
+    "postinstall": "npm run server:build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
@@ -41,7 +41,7 @@
     "mssql": "^4.1.0",
     "ngx-bootstrap": "^2.0.3",
     "pg": "^7.4.1",
-    "radweb": "^1.1.13",
+    "radweb": "^1.1.14",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"
   },
