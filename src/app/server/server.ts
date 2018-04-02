@@ -17,7 +17,7 @@ if (!process.env.DATABASE_URL) {
 
 environment.dataSource = new PostgresDataProvider(new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl:true
+    ssl: true
 }));
 
 let eb = new ExpressBridge(app);
@@ -25,7 +25,7 @@ let dataApi = eb.addArea('/dataApi');
 
 dataApi.add(new models.Categories());
 
-app.use(express.static( 'dist'));
+app.use(express.static('dist'));
 
 
 app.listen(port);
