@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "ng-serve": "ng serve",
-    "start": "concurrently \"ng serve\" \"npm run server:watch\"",
+    "start1": "concurrently \"ng serve\" \"npm run server:watch\"",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
