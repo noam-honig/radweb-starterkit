@@ -5,9 +5,11 @@
   "scripts": {
     "ng": "ng",
     "ng-serve": "ng serve",
-    "start":"ts-node --project tsconfig.server.json src/app/server/server.ts",
+    "start":"npm run server:execute",
+    "start_old":"ts-node --project tsconfig.server.json src/app/server/server.ts",
     "start_dev": "concurrently \"ng serve\" \"npm run server:watch\"",
     "build": "ng build",
+    "postinstall":"npm run server:build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
