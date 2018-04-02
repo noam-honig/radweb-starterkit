@@ -24,6 +24,7 @@ let dataApi = eb.addArea('/dataApi');
 
 dataApi.add(new models.Categories());
 
-app.route('/').get((req, res) => res.send('hello world'));
+app.use(express.static( 'dist'));
+
 
 app.listen(port);

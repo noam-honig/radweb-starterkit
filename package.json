@@ -9,7 +9,7 @@
     "start_old": "ts-node --project tsconfig.server.json src/app/server/server.ts",
     "start_dev": "concurrently \"ng serve\" \"npm run server:watch\"",
     "build": "ng build",
-    "postinstall": "npm run server:build",
+    "postinstall": "npm run server:build&&npm run build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
