@@ -2,16 +2,27 @@ import { environment } from './../../environments/environment';
 import * as models from './../models';
 import * as express from 'express';
 import * as radweb from 'radweb';
-import { SQLServerDataProvider, ExpressBridge } from 'radweb/server';
+import { SQLServerDataProvider, ExpressBridge, PostgresDataProvider } from 'radweb/server';
+import { Pool } from 'pg';
+import { config } from 'dotenv';
+config();
+
 let app = express();
 let port = 3000;
 
-let sqlServer = new SQLServerDataProvider('sa', 'MASTERKEY', '127.0.0.1', 'northwind', 'sqlexpress');
-environment.dataSource = sqlServer;
+
+if (!process.env.DATABASE_URL) {
+    console.log("No DATABASE_URL environment variable found, if you are developing locally, please add a '.env' with DATABASE_URL='postgres://*USERNAME*:*PASSWORD*@*HOST*:*PORT*/*DATABASE*'");
+}
+
+environment.dataSource = new PostgresDataProvider(new Pool({
+    connectionString: process.env.DATABASE_URL
+}));
 
 let eb = new ExpressBridge(app);
 let dataApi = eb.addArea('/dataApi');
-dataApi.addSqlDevHelpers(sqlServer);
+
+dataApi.add(new models.Categories());
 
 app.route('/').get((req, res) => res.send('hello world'));
 
