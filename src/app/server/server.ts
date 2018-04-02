@@ -5,6 +5,7 @@ import * as radweb from 'radweb';
 import { SQLServerDataProvider, ExpressBridge, PostgresDataProvider } from 'radweb/server';
 import { Pool } from 'pg';
 import { config } from 'dotenv';
+import { DataApi } from 'radweb/utils/server/DataApi';
 config();
 
 let app = express();
@@ -23,7 +24,11 @@ environment.dataSource = new PostgresDataProvider(new Pool({
 let eb = new ExpressBridge(app);
 let dataApi = eb.addArea('/dataApi');
 
-dataApi.add(new models.Categories());
+dataApi.add(r=>new DataApi(new models.Categories(), {
+    allowDelete:true,
+    allowInsert:true,
+    allowUpdate:true
+}));
 
 app.use(express.static('dist'));
 
