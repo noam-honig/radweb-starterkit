@@ -7,6 +7,7 @@ import { Pool } from 'pg';
 import { config } from 'dotenv';
 import { DataApi } from 'radweb/utils/server/DataApi';
 import * as path from 'path';
+import * as fs from 'fs';
 config();
 
 let app = express();
@@ -31,8 +32,31 @@ dataApi.add(r => new DataApi(new models.Categories(), {
     allowUpdate: true
 }));
 
+let appRoot = path.dirname(path.dirname(path.dirname(path.dirname(__dirname))));
+
+
+app.get('/cache.manifest', (req, res) => {
+    let result =
+        `CACHE MANIFEST
+/
+/home/
+`;
+    fs.readdirSync('dist').forEach(x => {
+        result += `/${x}
+`;
+
+    });
+    result+=`
+FALLBACK:
+/ /
+
+NETWORK:
+/dataApi/`
+    
+    res.send(result);
+});
 app.use(express.static('dist'));
-app.use('/*',express.static('dist',{index:'index.html'}));
+app.use('/*', express.static('dist', { index: 'index.html' }));
 
 
 
