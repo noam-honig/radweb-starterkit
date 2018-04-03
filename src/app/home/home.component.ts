@@ -12,7 +12,10 @@ export class HomeComponent implements OnInit {
   categories = new GridSettings(new Categories(),{
     allowUpdate: true,
     allowDelete: true,
-    allowInsert: true
+    allowInsert: true,
+    columnSettings:c=>[
+      c.id,c.categoryName,c.description
+    ]
   });
   constructor() { }
 

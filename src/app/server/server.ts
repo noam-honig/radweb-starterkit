@@ -40,24 +40,27 @@ app.get('/cache.manifest', (req, res) => {
         `CACHE MANIFEST
 CACHE:
 /
-/home/
+/home
 `;
     fs.readdirSync('dist').forEach(x => {
         result += `/${x}
 `;
 
     });
-    result+=`
+    result += `
 FALLBACK:
 / /
 
 NETWORK:
 /dataApi/`
-    
+
     res.send(result);
 });
 app.use(express.static('dist'));
-app.use('/*', express.static('dist', { index: 'index.html' }));
+app.use('/*', (req, res) => {
+    res.send(fs.readFileSync('dist/index.html').toString());
+});
+
 
 
 
