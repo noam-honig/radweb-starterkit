@@ -38,6 +38,7 @@ let appRoot = path.dirname(path.dirname(path.dirname(path.dirname(__dirname))));
 app.get('/cache.manifest', (req, res) => {
     let result =
         `CACHE MANIFEST
+CACHE:
 /
 /home/
 `;
