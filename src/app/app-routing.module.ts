@@ -1,19 +1,25 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes, RouterModule, Route } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-
+import { LoginComponent } from './users/login/login.component';
+import { RegisterComponent } from './users/register/register.component';
+import { UpdateInfoComponent } from './users/update-info/update-info.component';
+import { NotLoggedInGuard, LoggedInGuard, AdminGuard } from './shared/auth/auth-guard';
+import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: '', redirectTo: '/home', pathMatch: 'full' }
+  { path: 'Home', component: HomeComponent },
+  { path: 'User Accounts', component: UsersComponent,canActivate:[AdminGuard] },
+  { path: 'Sign In', component: LoginComponent, canActivate: [NotLoggedInGuard] },
+  { path: 'Register', component: RegisterComponent, canActivate: [NotLoggedInGuard] },
+  { path: 'Account Info', component: UpdateInfoComponent, canActivate: [LoggedInGuard] },
+  { path: '', redirectTo: '/Home', pathMatch: 'full' },
+  { path: '**', redirectTo: '/Home', pathMatch: 'full' }
+
 ];
 
 @NgModule({
-  imports: [
-    CommonModule, RouterModule.forRoot(routes)
-  ],
-  declarations: [],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
