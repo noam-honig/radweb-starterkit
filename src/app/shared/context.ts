@@ -4,7 +4,10 @@ import { foreachSync } from "./utils";
 import { Injectable } from "@angular/core";
 import { DataApiSettings } from "radweb";
 import { evilStatics } from './auth/evil-statics';
-import { myAuthInfo } from './auth/my-auth-info';
+
+
+import { Roles, UserInfo } from './auth/userInfo';
+import { ContextUserProvider } from './context-user-provider';
 
 
 
@@ -15,25 +18,38 @@ export class Context {
         this._lookupCache = new stamEntity();
     }
     isAdmin() {
-        return !!this.info && !!this.info.superAdmin;
+        return this.hasRole(Roles.superAdmin);
     }
     isLoggedIn() {
-        return !!this.info && !!this.info.loggedIn;
+        return !!this.user;
     }
-
-
-    protected _getInfo = () => evilStatics.auth.info;
-    protected _dataSource = evilStatics.dataSource;
     constructor() {
 
     }
+
+    userProvider?: ContextUserProvider;
+    protected _getInfo = () => undefined;//this.userProvider.getUser();
+    protected _dataSource = evilStatics.dataSource;
     protected _onServer = false;
     get onServer(): boolean {
         return this._onServer;
     }
 
-    get info(): myAuthInfo {
+    get user(): UserInfo {
         return this._getInfo();
+    }
+    hasRole(...allowedRoles: string[]) {
+        if (!this.user)
+            return false;
+        if (!allowedRoles)
+            return true;
+        if (!this.user.roles)
+            return false;
+        for (const role of allowedRoles) {
+            if (this.user.roles.indexOf(role) >= 0)
+                return true;
+        }
+        return false;
     }
 
     public create<lookupIdType, T extends Entity<lookupIdType>>(c: { new(...args: any[]): T; }) {
@@ -60,14 +76,15 @@ export class ServerContext extends Context {
     constructor() {
         super();
         this._onServer = true;
-        this._getInfo = () => <myAuthInfo>{ loggedIn: false };
+        this._getInfo = () => undefined;
 
     }
-    private req: DataApiRequest<myAuthInfo>;
 
-    setReq(req: DataApiRequest<myAuthInfo>) {
+    private req: DataApiRequest<UserInfo>;
+
+    setReq(req: DataApiRequest<UserInfo>) {
         this.req = req;
-        this._getInfo = () => req.authInfo ? req.authInfo : <myAuthInfo>{ loggedIn: false };
+        this._getInfo = () => req.authInfo ? req.authInfo : undefined;
     }
     setDataProvider(dataProvider: DataProviderFactory) {
         this._dataSource = dataProvider;

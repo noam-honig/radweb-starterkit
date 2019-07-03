@@ -86,7 +86,7 @@ export async function checkForDuplicateValue(row: Entity<any>, column: Column<an
     let rows = await row.source.find({ where: column.isEqualTo(column.value) });
     console.log(rows.length);
     if (rows.length > 0)
-      column.error = message || 'כבר קיים במערכת';
+      column.error = message || 'Already exists';
   }
 
 }

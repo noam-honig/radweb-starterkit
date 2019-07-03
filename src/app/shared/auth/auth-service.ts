@@ -1,20 +1,16 @@
 import { Injectable } from "@angular/core";
-import { myAuthInfo } from "./my-auth-info";
 import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
-import { evilStatics } from "./evil-statics";
-import { RunOnServer } from "./server-action";
-import { DialogService } from '../../select-popup/dialog';
-import { Context } from '../context';
-import { Users } from '../../users/users';
 import { MyRouterService } from '../my-router-service';
-
 import { HomeComponent } from '../../home/home.component';
-//import { UpdateInfoComponent } from 'src/app/users/update-info/update-info.component';
 
 
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { myRouteData, dummyRoute } from '../../app-routing.module';
+import { UserInfo } from './userInfo';
+import { AuthOnServer } from './auth-on-server';
+import { ContextUserProvider } from '../context-user-provider';
+
 
 const authToken = 'authorization';
 @Injectable()
@@ -35,20 +31,19 @@ export class AuthService {
     }
     user: UserInfo;
     constructor(
-        private dialog: DialogService,
         private router: MyRouterService
     ) { }
 
     async signIn(user: string, password: string) {
 
-        let loginResult = await AuthService.login(user, password);
+        let loginResult = await AuthOnServer.signIn(user, password);
         if (loginResult && loginResult.authToken) {
             this.setToken(loginResult.authToken);
             document.cookie = authToken + "=" + loginResult.authToken;
             return true;
         }
         return false;
-        
+
     }
     private currentToken: string;
     private setToken(token: string) {
@@ -63,40 +58,20 @@ export class AuthService {
 
         }
     }
-    @RunOnServer({ allowed: () => true })
-    static async login(user: string, password: string, context?: Context) {
-        let result: myAuthInfo;
-        
 
-        await context.for(Users).foreach(h => h.name.isEqualTo(user), async h => {
-            if (!h.realStoredPassword.value || evilStatics.passwordHelper.verify(password, h.realStoredPassword.value)) {
-                result = {
-                    loggedIn: true,
-                    helperId: h.id.value,
-                    superAdmin: h.admin.value,
-                    
-                  
-                    name: h.name.value
-                };
-                
-            }
-        });
-        if (result) {
-            return {
-                valid: true,
-                authToken: evilStatics.auth.createTokenFor(result),
-                
-            };
-        }
-        return { valid: false };
-    }
     signout(): any {
-        this.auth.signout();
+        this.setToken('');
+        document.cookie = authToken + '=; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+        this.user = undefined;
         this.router.navigate(HomeComponent);
     }
-    auth = evilStatics.auth;
+
+
 
 }
+
+
+
 @Injectable()
 export class AuthorizedGuard implements CanActivate {
     constructor(private auth: AuthService, private router: Router) {
@@ -108,8 +83,6 @@ export class AuthorizedGuard implements CanActivate {
         if (data && data.allowedRoles)
             allowedRoles = data.allowedRoles;
 
-
-
         if (this.auth.hasRole(allowedRoles)) {
             return true;
         }
@@ -119,7 +92,14 @@ export class AuthorizedGuard implements CanActivate {
     }
 }
 
-export interface UserInfo {
-    name: String;
-    roles: string[];
+
+@Injectable()
+export class AuthServiceContextUserProvider extends ContextUserProvider {
+    constructor(private authService: AuthService) {
+        super();
+    }
+    getUser(){
+        return this.authService.user;
+    }
+
 }

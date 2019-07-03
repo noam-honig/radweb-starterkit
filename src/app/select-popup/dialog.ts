@@ -29,39 +29,13 @@ export class DialogService {
     newsUpdate = new Subject<string>();
 
 
-    constructor(private dialog: MatDialog, private zone: NgZone, private busy: BusyService, private snackBar: MatSnackBar) {
+    constructor(private dialog: MatDialog, private zone: NgZone, private snackBar: MatSnackBar) {
         this.mediaMatcher.addListener(mql => zone.run(() => /*this.mediaMatcher = mql*/"".toString() ));
 
 
     }
-    eventSource: any;/*EventSource*/
-    refreshEventListener(enable: boolean) {
-        if (typeof (window) !== 'undefined') {
-            let EventSource: any = window['EventSource'];
-            if (enable && typeof (EventSource) !== "undefined") {
-                this.zone.run(() => {
-                    var source = new EventSource('/stream', { withCredentials: true });
-                    if (this.eventSource) {
-                        this.eventSource.close();
-                        this.eventSource = undefined;
-                    }
-                    this.eventSource = source;
-                    source.onmessage = e => {
-
-                        this.zone.run(() => {
-                            this.newsUpdate.next(e.data.toString());
-                            this.Info(e.data.toString() + ' ');
-                        });
-                    };
-                    let x = this;
-                    source.addEventListener("authenticate", async function (e) {
-                        await x.busy.donotWait(async () => await ServerEventAuthorizeAction.DoAthorize((<any>e).data.toString()));
-
-                    });
-                });
-            }
-        }
-    }
+    
+    
     displayArea(settings: InputAreaComponentData) {
         this.dialog.open(InputAreaComponent, { data: settings });
     }

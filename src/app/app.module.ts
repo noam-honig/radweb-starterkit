@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RadWebModule } from 'radweb';
 import { FormsModule } from '@angular/forms';
 
-import { AuthService } from './shared/auth/auth-service';
+import { AuthService, AuthServiceContextUserProvider } from './shared/auth/auth-service';
 import { DialogService } from './select-popup/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
@@ -30,6 +30,9 @@ import { WaitComponent } from './shared/wait/wait.component';
 import { YesNoQuestionComponent } from './select-popup/yes-no-question/yes-no-question.component';
 import { MyRouterService } from './shared/my-router-service';
 import { SignInComponent } from './common/sign-in/sign-in.component';
+import { ContextUserProvider } from './shared/context-user-provider';
+
+
 
 
 @NgModule({
@@ -42,7 +45,8 @@ import { SignInComponent } from './common/sign-in/sign-in.component';
     WaitComponent,
     YesNoQuestionComponent,
     HomeComponent,
-    SignInComponent
+    SignInComponent,
+    
 
   ],
   imports: [
@@ -58,18 +62,23 @@ import { SignInComponent } from './common/sign-in/sign-in.component';
     MatProgressSpinnerModule,
     MatCardModule,
     MatDialogModule,
-    MatSnackBarModule,
+    MatSnackBarModule, 
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     RadWebModule
   ],
   providers: [
+    
     AuthService,
     DialogService,
     BusyService,
+    ContextUserProvider,
     Context,
-    MyRouterService
+    MyRouterService,
+    AuthServiceContextUserProvider,
+    
+    { provide: ContextUserProvider, useClass: AuthServiceContextUserProvider }
   ],
   entryComponents:[WaitComponent,YesNoQuestionComponent,SignInComponent],
   bootstrap: [AppComponent]

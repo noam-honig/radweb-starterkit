@@ -1,13 +1,15 @@
 import { Action } from "radweb";
-import { myAuthInfo } from "./my-auth-info";
+
 
 import { evilStatics } from "./evil-statics";
 import { DataApiRequest } from "radweb";
 import 'reflect-metadata';
 
 import { PostgresDataProvider } from "radweb-server-postgres";
-import { environment } from '../../../environments/environment';
+
 import { ServerContext, Context } from '../context';
+import { UserInfo } from './userInfo';
+
 
 interface inArgs {
     args: any[];
@@ -17,12 +19,12 @@ interface result {
 }
 
 
-export class myServerAction extends Action<inArgs, result,myAuthInfo>
+export class myServerAction extends Action<inArgs, result,UserInfo>
 {
     constructor(name: string, private types: any[], private options: RunOnServerOptions, private originalMethod: (args: any[]) => any) {
         super( 'api/', name)
     }
-    protected async execute(info: inArgs, req: DataApiRequest<myAuthInfo>): Promise<result> {
+    protected async execute(info: inArgs, req: DataApiRequest<UserInfo>): Promise<result> {
         let result = { data: {} };
         await (<PostgresDataProvider>evilStatics.dataSource).doInTransaction(async ds => {
             let context = new ServerContext();

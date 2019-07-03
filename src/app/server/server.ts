@@ -5,7 +5,7 @@ import * as compression from 'compression';
 import { ExpressBridge, ActualSQLServerDataProvider } from 'radweb-server';
 import { DataApi } from 'radweb';
 import * as fs from 'fs';
-import { myAuthInfo } from '../shared/auth/my-auth-info';
+
 import { evilStatics } from '../shared/auth/evil-statics';
 import { serverInit } from './serverInit';
 import { ServerEvents } from './server-events';
@@ -19,16 +19,20 @@ import { ContextEntity, ServerContext, allEntities } from "../shared/context";
 import * as jwt from 'jsonwebtoken';
 import * as passwordHash from 'password-hash';
 
+import { AuthOnServer } from '../shared/auth/auth-on-server';
+import { AuthHelperOnServer } from '../shared/auth/auth-helper-on-server';
+import { UserInfo } from '../shared/auth/userInfo';
+
 serverInit().then(async () => {
 
- 
+
     let app = express();
     if (!process.env.DISABLE_SERVER_EVENTS) {
         let serverEvents = new ServerEvents(app);
-        
+
     }
-    if (process.env.logSqls){
-           ActualSQLServerDataProvider.LogToConsole = true;
+    if (process.env.logSqls) {
+        ActualSQLServerDataProvider.LogToConsole = true;
     }
 
     app.use(compression());
@@ -37,13 +41,17 @@ serverInit().then(async () => {
         app.use(secure);
     let port = process.env.PORT || 3000;
 
-    let eb = new ExpressBridge<myAuthInfo>(app);
+    let eb = new ExpressBridge<UserInfo>(app);
 
     let allUsersAlsoNotLoggedIn = eb.addArea('/api');
+    var tokenSignKey = process.env.TOKEN_SIGN_KEY;
+    AuthOnServer.helper = new AuthHelperOnServer<UserInfo>({
+        verify: (t) => jwt.verify(t, tokenSignKey),
+        sign: (i) => jwt.sign(i, tokenSignKey),
+        decode: t => jwt.decode(t)
+    });
 
-    evilStatics.auth.tokenSignKey = process.env.TOKEN_SIGN_KEY;
-
-    var addAction = (area: SiteArea<myAuthInfo>, a: any) => {
+    var addAction = (area: SiteArea<UserInfo>, a: any) => {
         let x = <myServerAction>a[serverActionField];
         if (!x) {
             throw 'failed to set server action, did you forget the RunOnServerDecorator?';
@@ -53,11 +61,7 @@ serverInit().then(async () => {
 
 
     actionInfo.runningOnServer = true;
-    evilStatics.auth.applyTo(eb, allUsersAlsoNotLoggedIn, {
-        verify: (t, k) => jwt.verify(t, k),
-        sign: (i, k) => jwt.sign(i, k),
-        decode: t => jwt.decode(t)
-    });
+    AuthOnServer.helper.applyTo(eb, allUsersAlsoNotLoggedIn);
     evilStatics.passwordHelper = {
         generateHash: p => passwordHash.generate(p),
         verify: (p, h) => passwordHash.verify(p, h)
@@ -112,7 +116,7 @@ serverInit().then(async () => {
     });
     app.use('/assets/apple-touch-icon.png', async (req, res) => {
 
-      
+
         try {
             res.send(fs.readFileSync('dist/assets/apple-touch-icon.png'));
         } catch (err) {
@@ -134,7 +138,7 @@ serverInit().then(async () => {
         const index = 'dist/index.html';
 
         if (fs.existsSync(index)) {
-            
+
 
             res.send(fs.readFileSync(index).toString());
         }

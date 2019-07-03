@@ -6,6 +6,8 @@ import { DataColumnSettings } from 'radweb';
 
 import { Context, MoreDataColumnSettings, EntityClass } from '../shared/context';
 import { evilStatics } from '../shared/auth/evil-statics';
+import { Roles } from '../shared/auth/userInfo';
+
 
 
 
@@ -36,8 +38,8 @@ export class Users extends IdEntity<UserId>  {
             apiDataFilter: () => {
                 if (!context.isLoggedIn())
                     return this.id.isEqualTo("No User");
-                else if (!(context.info.superAdmin ))
-                    return this.id.isEqualTo(this.context.info.helperId);
+                else if (!(context.hasRole(Roles.superAdmin) ))
+                    return this.id.isEqualTo(this.context.user.id);
             }
         });
     }

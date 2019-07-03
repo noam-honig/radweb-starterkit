@@ -1,4 +1,4 @@
-import { Component, NgZone, Injector, ViewChild } from '@angular/core';
+import { Component, NgZone, Injector, ViewChild, Injectable } from '@angular/core';
 import { Router, Route, CanActivate, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { MatSidenav, MAT_AUTOCOMPLETE_VALUE_ACCESSOR } from '@angular/material';
 import {MatDialog} from '@angular/material/dialog';
@@ -25,11 +25,9 @@ export class AppComponent {
     private injector: Injector,
     private dialog: MatDialog,
     private authService: AuthService,
-    private dialogService:DialogService,
+    public dialogService:DialogService,
+    public context: Context) {
     
-    private context: Context) {
-    auth.auth.tokenInfoChanged = () => dialogService.refreshEventListener(false);
-    auth.auth.tokenInfoChanged();
 
   }
   signInText() {
