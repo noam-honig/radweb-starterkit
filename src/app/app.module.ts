@@ -71,7 +71,7 @@ import { SignInComponent } from './common/sign-in/sign-in.component';
     Context,
     MyRouterService
   ],
-  entryComponents:[WaitComponent,YesNoQuestionComponent],
+  entryComponents:[WaitComponent,YesNoQuestionComponent,SignInComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

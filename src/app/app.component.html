@@ -6,7 +6,7 @@
   <button mat-flat-button color="primary" (click)="signIn()">{{signInText()}}</button>
 </mat-toolbar>
 <mat-sidenav-container class="app-sidenav-container">
-  <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10 no-print" [opened]="!dialog.isScreenSmall()" [mode]="dialog.isScreenSmall()?'over':'side'">
+  <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10 no-print" [opened]="!dialogService.isScreenSmall()" [mode]="dialogService.isScreenSmall()?'over':'side'">
     <div style="width:100%;text-align: center">
       
     </div>
