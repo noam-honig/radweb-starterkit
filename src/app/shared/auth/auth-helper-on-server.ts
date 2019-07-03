@@ -23,7 +23,7 @@ export class AuthHelperOnServer<T>
             return true;
         })
         server.addAllowedHeader(this.authToken);
-        area.addAction(new GetCurrentSession<T>('/', undefined));
+        
 
     }
 
@@ -37,12 +37,7 @@ export class AuthHelperOnServer<T>
     };
 
 }
-export class GetCurrentSession<T> extends Action<any, T, T>{
 
-    protected async execute(info: any, context: DataApiRequest<T>): Promise<T> {
-        return context.authInfo;
-    }
-}
 export interface JsonWebTokenHelper {
     decode(token: string): any;
     verify(token: string): any;

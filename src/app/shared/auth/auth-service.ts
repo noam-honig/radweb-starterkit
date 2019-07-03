@@ -32,7 +32,20 @@ export class AuthService {
     user: UserInfo;
     constructor(
         private router: MyRouterService
-    ) { }
+    ) { 
+        let c = document.cookie;
+        let i = c.indexOf(authToken + '=');
+        if (i >= 0) {
+            c = c.substring(i + authToken.length + 2).trim();
+            i = c.indexOf(';');
+            if (i >= 0) {
+                c = c.substring(0, i - 1);
+            }
+            this.setToken(c);
+
+        }
+
+    }
 
     async signIn(user: string, password: string) {
 
