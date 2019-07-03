@@ -50,7 +50,6 @@ var select_popup_component_1 = require("./select-popup.component");
 var yes_no_question_component_1 = require("./yes-no-question/yes-no-question.component");
 var input_area_component_1 = require("./input-area/input-area.component");
 var busy_service_1 = require("./busy-service");
-var environment_1 = require("../../environments/environment");
 var server_event_authorize_action_1 = require("../server/server-event-authorize-action");
 var rxjs_1 = require("rxjs");
 var DialogService = /** @class */ (function () {
@@ -78,7 +77,7 @@ var DialogService = /** @class */ (function () {
             var EventSource_1 = window['EventSource'];
             if (enable && typeof (EventSource_1) !== "undefined") {
                 this.zone.run(function () {
-                    var source = new EventSource_1(environment_1.environment.serverUrl + 'stream', { withCredentials: true });
+                    var source = new EventSource_1('/stream', { withCredentials: true });
                     if (_this.eventSource) {
                         _this.eventSource.close();
                         _this.eventSource = undefined;

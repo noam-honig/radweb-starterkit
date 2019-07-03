@@ -7,7 +7,7 @@ import { Route } from '@angular/router';
 import { Context } from '../../shared/context';
 import { Users } from '../users';
 import { AuthService } from '../../shared/auth/auth-service';
-import { LoggedInGuard } from '../../shared/auth/auth-guard';
+
 
 @Component({
   selector: 'app-update-info',
@@ -21,7 +21,7 @@ export class UpdateInfoComponent implements OnInit {
 
 
   }
-  static route: Route = { path: 'update-info', component: UpdateInfoComponent, data: { name: 'הגדרות אישיות' }, canActivate: [LoggedInGuard] };
+  
 
   confirmPassword = new StringColumn({ caption: 'Confirm Password', inputType: 'password', value: Users.emptyPassword });
   helpers = this.context.for(Users).gridSettings({
@@ -58,7 +58,7 @@ export class UpdateInfoComponent implements OnInit {
         this.dialog.Info("Update saved - thanks");
         this.confirmPassword.value = this.helpers.currentRow.password.value ? Users.emptyPassword : '';
         if (passwordChanged) {
-          this.auth.login(this.helpers.currentRow.name.value, thePassword, false, () => { });
+          this.auth.signIn(this.helpers.currentRow.name.value, thePassword);
         }
       }
     }

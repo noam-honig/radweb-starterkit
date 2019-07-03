@@ -20,7 +20,7 @@ interface result {
 export class myServerAction extends Action<inArgs, result,myAuthInfo>
 {
     constructor(name: string, private types: any[], private options: RunOnServerOptions, private originalMethod: (args: any[]) => any) {
-        super(environment.serverUrl + 'api/', name, evilStatics.auth.AddAuthInfoToRequest());
+        super( 'api/', name)
     }
     protected async execute(info: inArgs, req: DataApiRequest<myAuthInfo>): Promise<result> {
         let result = { data: {} };

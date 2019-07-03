@@ -1,10 +1,8 @@
-import * as radweb from 'radweb';
-const serverUrl= '/';
+import { RestDataProvider, DataProviderFactory } from 'radweb';
+
+
 
 export const environment = {
   production: true,
-  serverUrl,
-  //dataSource: new radweb.LocalStorageDataProvider() as radweb.DataProviderFactory
-  dataSource : new radweb.RestDataProvider(serverUrl+ 'dataApi') as radweb.DataProviderFactory,
-  openedDataApi: new radweb.RestDataProvider(serverUrl + 'openedDataApi') as radweb.DataProviderFactory
+  dataSource: new RestDataProvider('/dataapi') as DataProviderFactory,
 };

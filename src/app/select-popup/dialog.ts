@@ -40,7 +40,7 @@ export class DialogService {
             let EventSource: any = window['EventSource'];
             if (enable && typeof (EventSource) !== "undefined") {
                 this.zone.run(() => {
-                    var source = new EventSource(environment.serverUrl + 'stream', { withCredentials: true });
+                    var source = new EventSource('/stream', { withCredentials: true });
                     if (this.eventSource) {
                         this.eventSource.close();
                         this.eventSource = undefined;

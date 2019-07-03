@@ -1,11 +1,14 @@
 import { Component, NgZone, Injector, ViewChild } from '@angular/core';
 import { Router, Route, CanActivate, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { MatSidenav, MAT_AUTOCOMPLETE_VALUE_ACCESSOR } from '@angular/material';
+import {MatDialog} from '@angular/material/dialog';
 import { DialogService } from './select-popup/dialog';
 
 import { Context } from './shared/context';
-import { dummyRoute } from './shared/auth/auth-guard';
+
 import { AuthService } from './shared/auth/auth-service';
+import { SignInComponent } from './common/sign-in/sign-in.component';
+import { dummyRoute } from './app-routing.module';
 
 @Component({
   selector: 'app-root',
@@ -20,13 +23,27 @@ export class AppComponent {
     public router: Router,
     public activeRoute: ActivatedRoute,
     private injector: Injector,
-    public dialog: DialogService,
+    private dialog: MatDialog,
+    private authService: AuthService,
+    private dialogService:DialogService,
+    
     private context: Context) {
-    auth.auth.tokenInfoChanged = () => dialog.refreshEventListener(false);
+    auth.auth.tokenInfoChanged = () => dialogService.refreshEventListener(false);
     auth.auth.tokenInfoChanged();
 
   }
-
+  signInText() {
+    if (this.authService.user)
+      return this.authService.user.name;
+    return 'Sign in';
+  }
+  signIn() {
+    if (!this.authService.user) {
+        this.dialog.open(SignInComponent);
+    }else{
+      this.dialogService.YesNoQuestion("Would you like to sign out?",()=>{this.authService.signout()});
+    }
+  }
 
   routeName(route: Route) {
     let name = route.path;
@@ -72,7 +89,7 @@ export class AppComponent {
   }
   @ViewChild('sidenav') sidenav: MatSidenav;
   routeClicked() {
-    if (this.dialog.isScreenSmall())
+    if (this.dialogService.isScreenSmall())
       this.sidenav.close();
 
   }

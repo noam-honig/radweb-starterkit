@@ -26,7 +26,6 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var auth_service_1 = require("./auth-service");
 var my_router_service_1 = require("../my-router-service");
-var login_component_1 = require("../../users/login/login.component");
 var home_component_1 = require("../../home/home.component");
 var LoggedInGuard = /** @class */ (function () {
     function LoggedInGuard(auth, router) {
@@ -37,7 +36,7 @@ var LoggedInGuard = /** @class */ (function () {
         if (this.auth.auth.valid)
             return true;
         if (!(route instanceof dummyRoute))
-            this.router.navigate(login_component_1.LoginComponent);
+            this.router.navigate(LoginComponent);
         return false;
     };
     LoggedInGuard = __decorate([

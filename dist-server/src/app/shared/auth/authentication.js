@@ -49,7 +49,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var radweb_1 = require("radweb");
-var environment_1 = require("../../../environments/environment");
 //import { JwtHelperService } from '@auth0/angular-jwt';
 var authToken = 'auth-token';
 var Authentication = /** @class */ (function () {
@@ -133,13 +132,6 @@ var Authentication = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    Authentication.prototype.AddAuthInfoToRequest = function () {
-        var _this = this;
-        return function (add) {
-            if (_this.info)
-                add(authToken, _this._token);
-        };
-    };
     Authentication.prototype.applyTo = function (server, area, jwt) {
         var _this = this;
         this.jwt = jwt;
@@ -160,7 +152,7 @@ var Authentication = /** @class */ (function () {
             });
         }); });
         server.addAllowedHeader(authToken);
-        area.addAction(new GetCurrentSession(environment_1.environment.serverUrl, undefined, this.AddAuthInfoToRequest()));
+        area.addAction(new GetCurrentSession('/', undefined));
     };
     Authentication.prototype.createTokenFor = function (item) {
         return this.jwt.sign(item, this.tokenSignKey);
@@ -170,7 +162,7 @@ var Authentication = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 if (!this.__theInfo) {
-                    this.__theInfo = new GetCurrentSession(environment_1.environment.serverUrl, undefined, this.AddAuthInfoToRequest()).run(undefined).then(function (x) {
+                    this.__theInfo = new GetCurrentSession('/').run(undefined).then(function (x) {
                         _this._info = x;
                         return _this.info;
                     });

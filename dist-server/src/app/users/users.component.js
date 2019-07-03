@@ -48,7 +48,6 @@ var core_1 = require("@angular/core");
 var users_1 = require("./users");
 var context_1 = require("../shared/context");
 var dialog_1 = require("../select-popup/dialog");
-var auth_guard_1 = require("../shared/auth/auth-guard");
 var server_action_1 = require("../shared/auth/server-action");
 var UsersComponent = /** @class */ (function () {
     function UsersComponent(dialog, context) {
@@ -112,11 +111,6 @@ var UsersComponent = /** @class */ (function () {
     UsersComponent.prototype.ngOnInit = function () {
     };
     var UsersComponent_1;
-    UsersComponent.route = {
-        path: 'users',
-        component: UsersComponent_1,
-        data: { name: 'Users' }, canActivate: [auth_guard_1.AdminGuard]
-    };
     __decorate([
         server_action_1.RunOnServer({ allowed: function (c) { return c.isAdmin(); } }),
         __metadata("design:type", Function),

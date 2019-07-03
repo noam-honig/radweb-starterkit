@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { myAuthInfo } from "./my-auth-info";
-import { Router } from "@angular/router";
+import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
 import { evilStatics } from "./evil-statics";
 import { RunOnServer } from "./server-action";
 import { DialogService } from '../../select-popup/dialog';
@@ -10,41 +10,63 @@ import { MyRouterService } from '../my-router-service';
 
 import { HomeComponent } from '../../home/home.component';
 //import { UpdateInfoComponent } from 'src/app/users/update-info/update-info.component';
-import { LoginComponent } from '../../users/login/login.component';
 
 
+
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { myRouteData, dummyRoute } from '../../app-routing.module';
+
+const authToken = 'authorization';
 @Injectable()
 export class AuthService {
 
+    hasRole(allowedRoles?: string[]) {
+        if (!this.user)
+            return false;
+        if (!allowedRoles)
+            return true;
+        if (!this.user.roles)
+            return false;
+        for (const role of allowedRoles) {
+            if (this.user.roles.indexOf(role) >= 0)
+                return true;
+        }
+        return false;
+    }
+    user: UserInfo;
     constructor(
         private dialog: DialogService,
         private router: MyRouterService
     ) { }
 
-    async login(user: string, password: string, remember: boolean, fail: () => void) {
+    async signIn(user: string, password: string) {
 
-        let loginResponse = await AuthService.login(user, password);
-        this.auth.loggedIn(loginResponse, remember);
-        if (this.auth.valid) {
-            if (loginResponse.requirePassword) {
-                this.dialog.YesNoQuestion('Hi ' + this.auth.info.name + ' a password is required for your account, please define a password.', () => {
-                    this.router.navigate(HomeComponent);// I wanted to go to Update Info component but it caused a crash in angular
-                });
-            }
-            else {
-                this.router.navigate(HomeComponent)
-            }
-
+        let loginResult = await AuthService.login(user, password);
+        if (loginResult && loginResult.authToken) {
+            this.setToken(loginResult.authToken);
+            document.cookie = authToken + "=" + loginResult.authToken;
+            return true;
         }
-        else {
-            this.dialog.Error("Unknown user name or wrong password");
-            fail();
+        return false;
+        
+    }
+    private currentToken: string;
+    private setToken(token: string) {
+        this.currentToken = token;
+        this.user = undefined;
+        if (this.currentToken) {
+            {
+                try { this.user = new JwtHelperService().decodeToken(token); }
+                catch (err) { console.log(err); }
+
+            }
+
         }
     }
     @RunOnServer({ allowed: () => true })
     static async login(user: string, password: string, context?: Context) {
         let result: myAuthInfo;
-        let requirePassword = false;
+        
 
         await context.for(Users).foreach(h => h.name.isEqualTo(user), async h => {
             if (!h.realStoredPassword.value || evilStatics.passwordHelper.verify(password, h.realStoredPassword.value)) {
@@ -63,15 +85,41 @@ export class AuthService {
             return {
                 valid: true,
                 authToken: evilStatics.auth.createTokenFor(result),
-                requirePassword
+                
             };
         }
-        return { valid: false, requirePassword: false };
+        return { valid: false };
     }
     signout(): any {
         this.auth.signout();
-        this.router.navigate(LoginComponent);
+        this.router.navigate(HomeComponent);
     }
     auth = evilStatics.auth;
 
+}
+@Injectable()
+export class AuthorizedGuard implements CanActivate {
+    constructor(private auth: AuthService, private router: Router) {
+    }
+    canActivate(route: ActivatedRouteSnapshot) {
+        let allowedRoles: string[];
+
+        let data = route.routeConfig.data as myRouteData;
+        if (data && data.allowedRoles)
+            allowedRoles = data.allowedRoles;
+
+
+
+        if (this.auth.hasRole(allowedRoles)) {
+            return true;
+        }
+        if (!(route instanceof dummyRoute))
+            this.router.navigate(['/']);
+        return false;
+    }
+}
+
+export interface UserInfo {
+    name: String;
+    roles: string[];
 }

@@ -12,21 +12,39 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var material_1 = require("@angular/material");
-var dialog_1 = require("./select-popup/dialog");
+var dialog_1 = require("@angular/material/dialog");
+var dialog_2 = require("./select-popup/dialog");
 var context_1 = require("./shared/context");
 var auth_guard_1 = require("./shared/auth/auth-guard");
 var auth_service_1 = require("./shared/auth/auth-service");
+var sign_in_component_1 = require("./common/sign-in/sign-in.component");
 var AppComponent = /** @class */ (function () {
-    function AppComponent(auth, router, activeRoute, injector, dialog, context) {
+    function AppComponent(auth, router, activeRoute, injector, dialog, authService, dialogService, context) {
         this.auth = auth;
         this.router = router;
         this.activeRoute = activeRoute;
         this.injector = injector;
         this.dialog = dialog;
+        this.authService = authService;
+        this.dialogService = dialogService;
         this.context = context;
-        auth.auth.tokenInfoChanged = function () { return dialog.refreshEventListener(false); };
+        auth.auth.tokenInfoChanged = function () { return dialogService.refreshEventListener(false); };
         auth.auth.tokenInfoChanged();
     }
+    AppComponent.prototype.signInText = function () {
+        if (this.authService.user)
+            return this.authService.user.name;
+        return 'Sign in';
+    };
+    AppComponent.prototype.signIn = function () {
+        var _this = this;
+        if (!this.authService.user) {
+            this.dialog.open(sign_in_component_1.SignInComponent);
+        }
+        else {
+            this.dialogService.YesNoQuestion("Would you like to sign out?", function () { _this.authService.signout(); });
+        }
+    };
     AppComponent.prototype.routeName = function (route) {
         var name = route.path;
         if (route.data && route.data.name)
@@ -67,7 +85,7 @@ var AppComponent = /** @class */ (function () {
         return true;
     };
     AppComponent.prototype.routeClicked = function () {
-        if (this.dialog.isScreenSmall())
+        if (this.dialogService.isScreenSmall())
             this.sidenav.close();
     };
     AppComponent.prototype.test = function () {
@@ -86,7 +104,9 @@ var AppComponent = /** @class */ (function () {
             router_1.Router,
             router_1.ActivatedRoute,
             core_1.Injector,
-            dialog_1.DialogService,
+            dialog_1.MatDialog,
+            auth_service_1.AuthService,
+            dialog_2.DialogService,
             context_1.Context])
     ], AppComponent);
     return AppComponent;

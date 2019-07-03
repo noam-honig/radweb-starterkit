@@ -17,7 +17,7 @@ export const evilStatics = {
     passwordHelper,
     auth: auth,
     
-    dataSource: new RestDataProvider(environment.serverUrl + 'api', auth.AddAuthInfoToRequest()) as DataProviderFactory,
+    dataSource: new RestDataProvider('api') as DataProviderFactory,
     
 
 }

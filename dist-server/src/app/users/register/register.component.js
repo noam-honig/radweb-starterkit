@@ -85,7 +85,7 @@ var RegisterComponent = /** @class */ (function () {
                         return [4 /*yield*/, this.helpers._doSavingRow(userInfo)];
                     case 1:
                         _a.sent();
-                        this.auth.login(userInfo.name.value, this.confirmPassword.value, false, function () { });
+                        this.auth.signIn(userInfo.name.value, this.confirmPassword.value);
                         return [3 /*break*/, 3];
                     case 2:
                         err_1 = _a.sent();

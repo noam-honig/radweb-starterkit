@@ -50,7 +50,6 @@ var dialog_1 = require("../../select-popup/dialog");
 var context_1 = require("../../shared/context");
 var users_1 = require("../users");
 var auth_service_1 = require("../../shared/auth/auth-service");
-var auth_guard_1 = require("../../shared/auth/auth-guard");
 var UpdateInfoComponent = /** @class */ (function () {
     function UpdateInfoComponent(dialog, auth, context) {
         var _this = this;
@@ -69,7 +68,6 @@ var UpdateInfoComponent = /** @class */ (function () {
             ]; },
         });
     }
-    UpdateInfoComponent_1 = UpdateInfoComponent;
     UpdateInfoComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.helpers.getRecords().then(function () {
@@ -95,7 +93,7 @@ var UpdateInfoComponent = /** @class */ (function () {
                         this.dialog.Info("Update saved - thanks");
                         this.confirmPassword.value = this.helpers.currentRow.password.value ? users_1.Users.emptyPassword : '';
                         if (passwordChanged) {
-                            this.auth.login(this.helpers.currentRow.name.value, thePassword, false, function () { });
+                            this.auth.signIn(this.helpers.currentRow.name.value, thePassword);
                         }
                         _a.label = 3;
                     case 3: return [3 /*break*/, 5];
@@ -107,9 +105,7 @@ var UpdateInfoComponent = /** @class */ (function () {
             });
         });
     };
-    var UpdateInfoComponent_1;
-    UpdateInfoComponent.route = { path: 'update-info', component: UpdateInfoComponent_1, data: { name: 'הגדרות אישיות' }, canActivate: [auth_guard_1.LoggedInGuard] };
-    UpdateInfoComponent = UpdateInfoComponent_1 = __decorate([
+    UpdateInfoComponent = __decorate([
         core_1.Component({
             selector: 'app-update-info',
             templateUrl: './update-info.component.html',

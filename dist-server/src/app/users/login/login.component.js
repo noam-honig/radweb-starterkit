@@ -22,7 +22,7 @@ var LoginComponent = /** @class */ (function () {
     };
     LoginComponent.prototype.login = function () {
         var _this = this;
-        this.auth.login(this.user, this.password, this.remember, function () { return _this.password = ''; });
+        this.auth.signIn(this.user, this.password, this.remember, function () { return _this.password = ''; });
     };
     LoginComponent.prototype.register = function () {
         this.router.navigate(register_component_1.RegisterComponent);

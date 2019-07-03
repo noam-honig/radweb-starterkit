@@ -46,7 +46,6 @@ var evil_statics_1 = require("../shared/auth/evil-statics");
 var serverInit_1 = require("./serverInit");
 var server_events_1 = require("./server-events");
 var server_action_1 = require("../shared/auth/server-action");
-require("../helpers/helpers.component");
 require("../app.module");
 var context_1 = require("../shared/context");
 var jwt = require("jsonwebtoken");

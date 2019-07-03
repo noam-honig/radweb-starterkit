@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    
+    "rootDir": "./",
     "outDir": "./dist-server/src",
     "sourceMap": true,
     "declaration": false,
@@ -18,8 +18,8 @@
       "es2017",
       "dom"
     ],
-    
-  },"files": [
+  },
+  "files": [
     "./src/app/server/server.ts",
     "./src/app/server/doSomething.ts"
   ]

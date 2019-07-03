@@ -45,6 +45,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
 var evil_statics_1 = require("./evil-statics");
 var server_action_1 = require("./server-action");
 var dialog_1 = require("../../select-popup/dialog");
@@ -53,7 +54,9 @@ var users_1 = require("../../users/users");
 var my_router_service_1 = require("../my-router-service");
 var home_component_1 = require("../../home/home.component");
 //import { UpdateInfoComponent } from 'src/app/users/update-info/update-info.component';
-var login_component_1 = require("../../users/login/login.component");
+var angular_jwt_1 = require("@auth0/angular-jwt");
+var app_routing_module_1 = require("../../app-routing.module");
+var authToken = 'authorization';
 var AuthService = /** @class */ (function () {
     function AuthService(dialog, router) {
         this.dialog = dialog;
@@ -61,73 +64,87 @@ var AuthService = /** @class */ (function () {
         this.auth = evil_statics_1.evilStatics.auth;
     }
     AuthService_1 = AuthService;
-    AuthService.prototype.login = function (user, password, remember, fail) {
+    AuthService.prototype.hasRole = function (allowedRoles) {
+        if (!this.user)
+            return false;
+        if (!allowedRoles)
+            return true;
+        if (!this.user.roles)
+            return false;
+        for (var _i = 0, allowedRoles_1 = allowedRoles; _i < allowedRoles_1.length; _i++) {
+            var role = allowedRoles_1[_i];
+            if (this.user.roles.indexOf(role) >= 0)
+                return true;
+        }
+        return false;
+    };
+    AuthService.prototype.signIn = function (user, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var loginResponse;
-            var _this = this;
+            var loginResult;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, AuthService_1.login(user, password)];
                     case 1:
-                        loginResponse = _a.sent();
-                        this.auth.loggedIn(loginResponse, remember);
-                        if (this.auth.valid) {
-                            if (loginResponse.requirePassword) {
-                                this.dialog.YesNoQuestion('Hi ' + this.auth.info.name + ' a password is required for your account, please define a password.', function () {
-                                    _this.router.navigate(home_component_1.HomeComponent); // I wanted to go to Update Info component but it caused a crash in angular
-                                });
-                            }
-                            else {
-                                this.router.navigate(home_component_1.HomeComponent);
-                            }
+                        loginResult = _a.sent();
+                        if (loginResult && loginResult.authToken) {
+                            this.setToken(loginResult.authToken);
+                            document.cookie = authToken + "=" + loginResult.authToken;
+                            return [2 /*return*/, true];
                         }
-                        else {
-                            this.dialog.Error("Unknown user name or wrong password");
-                            fail();
-                        }
-                        return [2 /*return*/];
+                        return [2 /*return*/, false];
                 }
             });
         });
     };
+    AuthService.prototype.setToken = function (token) {
+        this.currentToken = token;
+        this.user = undefined;
+        if (this.currentToken) {
+            {
+                try {
+                    this.user = new angular_jwt_1.JwtHelperService().decodeToken(token);
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+        }
+    };
     AuthService.login = function (user, password, context) {
         return __awaiter(this, void 0, void 0, function () {
-            var result, requirePassword;
+            var result;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        requirePassword = false;
-                        return [4 /*yield*/, context.for(users_1.Users).foreach(function (h) { return h.name.isEqualTo(user); }, function (h) { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    if (!h.realStoredPassword.value || evil_statics_1.evilStatics.passwordHelper.verify(password, h.realStoredPassword.value)) {
-                                        result = {
-                                            loggedIn: true,
-                                            helperId: h.id.value,
-                                            superAdmin: h.admin.value,
-                                            name: h.name.value
-                                        };
-                                    }
-                                    return [2 /*return*/];
-                                });
-                            }); })];
+                    case 0: return [4 /*yield*/, context.for(users_1.Users).foreach(function (h) { return h.name.isEqualTo(user); }, function (h) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                if (!h.realStoredPassword.value || evil_statics_1.evilStatics.passwordHelper.verify(password, h.realStoredPassword.value)) {
+                                    result = {
+                                        loggedIn: true,
+                                        helperId: h.id.value,
+                                        superAdmin: h.admin.value,
+                                        name: h.name.value
+                                    };
+                                }
+                                return [2 /*return*/];
+                            });
+                        }); })];
                     case 1:
                         _a.sent();
                         if (result) {
                             return [2 /*return*/, {
                                     valid: true,
                                     authToken: evil_statics_1.evilStatics.auth.createTokenFor(result),
-                                    requirePassword: requirePassword
                                 }];
                         }
-                        return [2 /*return*/, { valid: false, requirePassword: false }];
+                        return [2 /*return*/, { valid: false }];
                 }
             });
         });
     };
     AuthService.prototype.signout = function () {
         this.auth.signout();
-        this.router.navigate(login_component_1.LoginComponent);
+        this.router.navigate(home_component_1.HomeComponent);
     };
     var AuthService_1;
     __decorate([
@@ -144,4 +161,28 @@ var AuthService = /** @class */ (function () {
     return AuthService;
 }());
 exports.AuthService = AuthService;
+var AuthorizedGuard = /** @class */ (function () {
+    function AuthorizedGuard(auth, router) {
+        this.auth = auth;
+        this.router = router;
+    }
+    AuthorizedGuard.prototype.canActivate = function (route) {
+        var allowedRoles;
+        var data = route.routeConfig.data;
+        if (data && data.allowedRoles)
+            allowedRoles = data.allowedRoles;
+        if (this.auth.hasRole(allowedRoles)) {
+            return true;
+        }
+        if (!(route instanceof app_routing_module_1.dummyRoute))
+            this.router.navigate(['/']);
+        return false;
+    };
+    AuthorizedGuard = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [AuthService, router_1.Router])
+    ], AuthorizedGuard);
+    return AuthorizedGuard;
+}());
+exports.AuthorizedGuard = AuthorizedGuard;
 //# sourceMappingURL=auth-service.js.map

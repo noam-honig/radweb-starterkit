@@ -13,7 +13,7 @@ import { ServerEvents } from './server-events';
 
 import { serverActionField, myServerAction, actionInfo } from "../shared/auth/server-action";
 import { SiteArea } from "radweb-server";
-import "../helpers/helpers.component";
+
 import '../app.module';
 import { ContextEntity, ServerContext, allEntities } from "../shared/context";
 import * as jwt from 'jsonwebtoken';

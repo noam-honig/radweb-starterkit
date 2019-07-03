@@ -51,12 +51,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var radweb_1 = require("radweb");
 var evil_statics_1 = require("./evil-statics");
 require("reflect-metadata");
-var environment_1 = require("../../../environments/environment");
 var context_1 = require("../context");
 var myServerAction = /** @class */ (function (_super) {
     __extends(myServerAction, _super);
     function myServerAction(name, types, options, originalMethod) {
-        var _this = _super.call(this, environment_1.environment.serverUrl + 'api/', name, evil_statics_1.evilStatics.auth.AddAuthInfoToRequest()) || this;
+        var _this = _super.call(this, 'api/', name) || this;
         _this.types = types;
         _this.options = options;
         _this.originalMethod = originalMethod;

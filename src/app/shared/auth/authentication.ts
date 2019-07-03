@@ -88,12 +88,7 @@ export class Authentication<T> {
     }
 
 
-    AddAuthInfoToRequest() {
-        return (add: ((name: string, value: string) => void)) => {
-            if (this.info)
-                add(authToken, this._token);
-        }
-    }
+    
 
 
     applyTo(server: DataApiServer<T>, area: SiteArea<T>,jwt:JsonWebTokenHelper): void {
@@ -106,7 +101,7 @@ export class Authentication<T> {
             return true;
         })
         server.addAllowedHeader(authToken);
-        area.addAction(new GetCurrentSession(environment.serverUrl,undefined, this.AddAuthInfoToRequest()));
+        area.addAction(new GetCurrentSession('/',undefined));
 
     }
     jwt:JsonWebTokenHelper;
@@ -127,7 +122,7 @@ export class Authentication<T> {
     async getAuthInfoAsync(): Promise<T> {
         if (!this.__theInfo) {
 
-            this.__theInfo = new GetCurrentSession(environment.serverUrl, undefined, this.AddAuthInfoToRequest()).run(undefined).then(x => {
+            this.__theInfo = new GetCurrentSession('/').run(undefined).then(x => {
                 this._info = x as T;
                 return this.info;
             });

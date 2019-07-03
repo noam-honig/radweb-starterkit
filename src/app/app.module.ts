@@ -21,26 +21,28 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Context } from './shared/context';
 import { MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule } from '@angular/material';
 import { UsersComponent } from './users/users.component';
-import { LoginComponent } from './users/login/login.component';
+
 import { UpdateInfoComponent } from './users/update-info/update-info.component';
 import { RegisterComponent } from './users/register/register.component';
 import { HomeComponent } from './home/home.component';
-import { NotLoggedInGuard, LoggedInGuard, AdminGuard } from './shared/auth/auth-guard';
+
 import { WaitComponent } from './shared/wait/wait.component';
 import { YesNoQuestionComponent } from './select-popup/yes-no-question/yes-no-question.component';
 import { MyRouterService } from './shared/my-router-service';
+import { SignInComponent } from './common/sign-in/sign-in.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
-    LoginComponent,
+    
     UpdateInfoComponent,
     RegisterComponent,
     WaitComponent,
     YesNoQuestionComponent,
-    HomeComponent
+    HomeComponent,
+    SignInComponent
 
   ],
   imports: [
@@ -67,10 +69,7 @@ import { MyRouterService } from './shared/my-router-service';
     DialogService,
     BusyService,
     Context,
-    NotLoggedInGuard,
-    LoggedInGuard,
-    MyRouterService,
-    AdminGuard
+    MyRouterService
   ],
   entryComponents:[WaitComponent,YesNoQuestionComponent],
   bootstrap: [AppComponent]

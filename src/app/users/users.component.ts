@@ -9,8 +9,9 @@ import { Route } from '@angular/router';
 
 import { Context } from '../shared/context';
 import { DialogService } from '../select-popup/dialog';
-import { AdminGuard } from '../shared/auth/auth-guard';
+
 import { RunOnServer } from '../shared/auth/server-action';
+import { myRoute } from '../app-routing.module';
 
 
 @Component({
@@ -21,11 +22,7 @@ import { RunOnServer } from '../shared/auth/server-action';
 export class UsersComponent implements OnInit {
   constructor(private dialog: DialogService, public context: Context) {
   }
-  static route: Route = {
-    path: 'users',
-    component: UsersComponent,
-    data: { name: 'Users' }, canActivate: [AdminGuard]
-  };
+ 
 
   users = this.context.for(Users).gridSettings({
     allowDelete: true,

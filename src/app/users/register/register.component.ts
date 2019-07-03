@@ -5,7 +5,7 @@ import { Route } from '@angular/router';
 import { Context } from '../../shared/context';
 import { Users } from '../users';
 import { AuthService } from '../../shared/auth/auth-service';
-import { NotLoggedInGuard } from '../../shared/auth/auth-guard';
+
 
 @Component({
   selector: 'app-register',
@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
         if (h.password.value != this.confirmPassword.value) {
           h.password.error = "passwords do not match";
         }
-    }
+    } 
   });
 
 
@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
     try {
       let userInfo = this.helpers.currentRow;
       await this.helpers._doSavingRow(userInfo);
-      this.auth.login(userInfo.name.value, this.confirmPassword.value, false, () => { });
+      this.auth.signIn(userInfo.name.value, this.confirmPassword.value);
     }
     catch (err) {
       console.log(err);

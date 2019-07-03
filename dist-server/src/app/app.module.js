@@ -27,14 +27,13 @@ var snack_bar_1 = require("@angular/material/snack-bar");
 var context_1 = require("./shared/context");
 var material_1 = require("@angular/material");
 var users_component_1 = require("./users/users.component");
-var login_component_1 = require("./users/login/login.component");
 var update_info_component_1 = require("./users/update-info/update-info.component");
 var register_component_1 = require("./users/register/register.component");
 var home_component_1 = require("./home/home.component");
-var auth_guard_1 = require("./shared/auth/auth-guard");
 var wait_component_1 = require("./shared/wait/wait.component");
 var yes_no_question_component_1 = require("./select-popup/yes-no-question/yes-no-question.component");
 var my_router_service_1 = require("./shared/my-router-service");
+var sign_in_component_1 = require("./common/sign-in/sign-in.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -43,12 +42,12 @@ var AppModule = /** @class */ (function () {
             declarations: [
                 app_component_1.AppComponent,
                 users_component_1.UsersComponent,
-                login_component_1.LoginComponent,
                 update_info_component_1.UpdateInfoComponent,
                 register_component_1.RegisterComponent,
                 wait_component_1.WaitComponent,
                 yes_no_question_component_1.YesNoQuestionComponent,
-                home_component_1.HomeComponent
+                home_component_1.HomeComponent,
+                sign_in_component_1.SignInComponent
             ],
             imports: [
                 platform_browser_1.BrowserModule,
@@ -74,10 +73,7 @@ var AppModule = /** @class */ (function () {
                 dialog_1.DialogService,
                 busy_service_1.BusyService,
                 context_1.Context,
-                auth_guard_1.NotLoggedInGuard,
-                auth_guard_1.LoggedInGuard,
-                my_router_service_1.MyRouterService,
-                auth_guard_1.AdminGuard
+                my_router_service_1.MyRouterService
             ],
             entryComponents: [wait_component_1.WaitComponent, yes_no_question_component_1.YesNoQuestionComponent],
             bootstrap: [app_component_1.AppComponent]
