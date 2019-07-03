@@ -5,20 +5,14 @@ import * as compression from 'compression';
 import { ExpressBridge, ActualSQLServerDataProvider } from 'radweb-server';
 import { DataApi } from 'radweb';
 import * as fs from 'fs';
-
 import { evilStatics } from '../shared/auth/evil-statics';
 import { serverInit } from './serverInit';
-import { ServerEvents } from './server-events';
-
-
 import { serverActionField, myServerAction, actionInfo } from "../shared/auth/server-action";
 import { SiteArea } from "radweb-server";
-
 import '../app.module';
 import { ContextEntity, ServerContext, allEntities } from "../shared/context";
 import * as jwt from 'jsonwebtoken';
 import * as passwordHash from 'password-hash';
-
 import { AuthOnServer } from '../shared/auth/auth-on-server';
 import { AuthHelperOnServer } from '../shared/auth/auth-helper-on-server';
 import { UserInfo } from '../shared/auth/userInfo';
@@ -27,10 +21,7 @@ serverInit().then(async () => {
 
 
     let app = express();
-    if (!process.env.DISABLE_SERVER_EVENTS) {
-        let serverEvents = new ServerEvents(app);
 
-    }
     if (process.env.logSqls) {
         ActualSQLServerDataProvider.LogToConsole = true;
     }
@@ -45,7 +36,7 @@ serverInit().then(async () => {
 
     let allUsersAlsoNotLoggedIn = eb.addArea('/api');
     var tokenSignKey = process.env.TOKEN_SIGN_KEY;
-    AuthOnServer.helper = new AuthHelperOnServer<UserInfo>({
+    AuthOnServer.helper = new AuthHelperOnServer<UserInfo>(eb, {
         verify: (t) => jwt.verify(t, tokenSignKey),
         sign: (i) => jwt.sign(i, tokenSignKey),
         decode: t => jwt.decode(t)
@@ -90,78 +81,16 @@ serverInit().then(async () => {
         console.log('Security not set for:' + errors);
     }
 
+    app.use(express.static('dist'));
 
-
-
-    app.get('/cache.manifest', (req, res) => {
-        let result =
-            `CACHE MANIFEST
-    CACHE:
-    /
-    /home
-    `;
-        fs.readdirSync('dist').forEach(x => {
-            result += `/${x}
-        `;
-
-        });
-        result += `
-    FALLBACK:
-    / /
-    
-    NETWORK:
-    /dataApi/`
-
-        res.send(result);
-    });
-    app.use('/assets/apple-touch-icon.png', async (req, res) => {
-
-
-        try {
-            res.send(fs.readFileSync('dist/assets/apple-touch-icon.png'));
-        } catch (err) {
-            res.statusCode = 404;
-            res.send(err);
-        }
-    });
-    app.use('/favicon.ico', async (req, res) => {
-        res.contentType('ico');
-        try {
-            res.send(fs.readFileSync('dist/favicon.ico'));
-        }
-        catch (err) {
-            res.statusCode = 404;
-            res.send(err);
-        }
-    });
-    async function sendIndex(res: express.Response) {
+    app.use('/*', async (req, res) => {
         const index = 'dist/index.html';
-
         if (fs.existsSync(index)) {
-
-
             res.send(fs.readFileSync(index).toString());
         }
         else {
             res.send('No Result' + fs.realpathSync(index));
-        }
-    }
 
-    app.get('', (req, res) => {
-
-        sendIndex(res);
-    });
-    app.get('/index.html', (req, res) => {
-
-        sendIndex(res);
-    });
-    app.use(express.static('dist'));
-
-    app.use('/*', async (req, res) => {
-        if (req.method == 'OPTIONS')
-            res.send('');
-        else {
-            await sendIndex(res);
         }
     });
     app.listen(port);

@@ -4,9 +4,6 @@ import { Entity, IDataSettings } from "radweb";
 import { SelectPopupComponent, SelectComponentInfo } from "./select-popup.component";
 import { YesNoQuestionComponentData, YesNoQuestionComponent } from "./yes-no-question/yes-no-question.component";
 import { InputAreaComponentData, InputAreaComponent } from "./input-area/input-area.component";
-import { BusyService } from "./busy-service";
-import { environment } from "../../environments/environment";
-import { ServerEventAuthorizeAction } from "../server/server-event-authorize-action";
 import { Subject } from "rxjs";
 
 

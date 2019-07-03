@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RunOnServer } from '../shared/auth/server-action';
+import { Context } from '../shared/context';
 
 @Component({
   selector: 'app-home',
@@ -11,5 +13,13 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
   }
-
+  clickMe() {
+    HomeComponent.test();
+  }
+  @RunOnServer({ allowed: () => true })
+  static test(context?: Context) {
+    console.log('hi');
+    console.log(context.user);
+  }
 }
+

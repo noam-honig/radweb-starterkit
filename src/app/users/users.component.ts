@@ -12,6 +12,7 @@ import { DialogService } from '../select-popup/dialog';
 
 import { RunOnServer } from '../shared/auth/server-action';
 import { myRoute } from '../app-routing.module';
+import { Roles } from '../shared/auth/userInfo';
 
 
 @Component({
@@ -22,7 +23,9 @@ import { myRoute } from '../app-routing.module';
 export class UsersComponent implements OnInit {
   constructor(private dialog: DialogService, public context: Context) {
   }
- 
+ isAdmin(){
+   return this.context.hasRole(Roles.superAdmin);
+ }
 
   users = this.context.for(Users).gridSettings({
     allowDelete: true,

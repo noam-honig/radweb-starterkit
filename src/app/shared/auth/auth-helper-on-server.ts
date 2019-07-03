@@ -4,9 +4,25 @@ import { SiteArea } from 'radweb-server';
 export class AuthHelperOnServer<T>
 {
 
-    constructor(private jwt: JsonWebTokenHelper, private authToken?: string) {
+    constructor(server: DataApiServer<T>, private jwt: JsonWebTokenHelper, private authToken?: string) {
         if (!authToken) {
             this.authToken = 'authorization';
+        }
+        server.addRequestProcessor(async req => {
+            return await this.authenticateRequest(req);
+        })
+    }
+    async authenticateRequest(req: DataApiRequest<T>) {
+        var h = req.getHeader('cookie');
+        if (h) {
+            for (const iterator of h.split(';')) {
+                let itemInfo = iterator.split('=');
+                if (itemInfo && itemInfo[0].trim() == this.authToken) {
+                    if (this.validateToken)
+                        req.authInfo = await this.validateToken(itemInfo[1]);
+                }
+            }
+            return true;
         }
     }
     createSecuredTokenBasedOn(what: any) {
@@ -15,15 +31,9 @@ export class AuthHelperOnServer<T>
 
     applyTo(server: DataApiServer<T>, area: SiteArea<T>): void {
 
-        server.addRequestProcessor(async req => {
-            var h = req.getHeader(this.authToken);
 
-            if (this.validateToken)
-                req.authInfo = await this.validateToken(h);
-            return true;
-        })
         server.addAllowedHeader(this.authToken);
-        
+
 
     }
 
