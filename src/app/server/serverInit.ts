@@ -6,6 +6,7 @@ import { foreachSync } from '../shared/utils';
 import { ServerContext, allEntities } from '../shared/context';
 import '../app.module';
 import { evilStatics } from '../shared/auth/evil-statics';
+import { ActualSQLServerDataProvider } from 'radweb-server';
 
 
 export async function serverInit() {
@@ -15,11 +16,16 @@ export async function serverInit() {
     if (process.env.DISABLE_POSTGRES_SSL)
         ssl = false;
 
+        if (process.env.logSqls) {
+            ActualSQLServerDataProvider.LogToConsole = true;
+        }
 
     if (!process.env.DATABASE_URL) {
         console.log("No DATABASE_URL environment variable found, if you are developing locally, please add a '.env' with DATABASE_URL='postgres://*USERNAME*:*PASSWORD*@*HOST*:*PORT*/*DATABASE*'");
     }
     let dbUrl = process.env.DATABASE_URL;
+    
+
     
     const pool = new Pool({
         connectionString: dbUrl,

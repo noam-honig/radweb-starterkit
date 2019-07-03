@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     
-    "outDir": "./dist-server/src",
+    "outDir": "./dist-server/",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",

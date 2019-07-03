@@ -7,9 +7,14 @@ import { HomeComponent } from '../../home/home.component';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { myRouteData, dummyRoute } from '../../app-routing.module';
-import { UserInfo } from './userInfo';
-import { AuthOnServer } from './auth-on-server';
+import { UserInfo, Roles } from './userInfo';
+
 import { ContextUserProvider } from '../context-user-provider';
+import { JWTCookieAuthorizationHelper } from './jwt-cookie-authoerization-helper';
+import { RunOnServer } from './server-action';
+import { Context } from '../context';
+import { Users } from '../../users/users';
+import { evilStatics } from './evil-statics';
 
 
 const authToken = 'authorization';
@@ -49,7 +54,7 @@ export class AuthService {
 
     async signIn(user: string, password: string) {
 
-        let loginResult = await AuthOnServer.signIn(user, password);
+        let loginResult = await AuthService.signIn(user, password);
         if (loginResult && loginResult.authToken) {
             this.setToken(loginResult.authToken);
             document.cookie = authToken + "=" + loginResult.authToken;
@@ -77,6 +82,35 @@ export class AuthService {
         document.cookie = authToken + '=; expires = Thu, 01 Jan 1970 00:00:00 GMT';
         this.user = undefined;
         this.router.navigate(HomeComponent);
+    }
+    
+
+    static helper:JWTCookieAuthorizationHelper<UserInfo>;
+
+    @RunOnServer({ allowed: () => true })
+    static async signIn(user: string, password: string, context?: Context) {
+        let result: UserInfo;
+        await context.for(Users).foreach(h => h.name.isEqualTo(user), async h => {
+            if (!h.realStoredPassword.value || evilStatics.passwordHelper.verify(password, h.realStoredPassword.value)) {
+                result = {
+                    id: h.id.value,
+                    roles: [],
+                    name: h.name.value
+                };
+                if (h.admin.value) {
+                    result.roles.push(Roles.superAdmin);
+                }
+
+            }
+        });
+        if (result) {
+            return {
+                valid: true,
+                authToken: AuthService.helper.createSecuredTokenBasedOn(<any>result)
+
+            };
+        }
+        return { valid: false };
     }
 
 
