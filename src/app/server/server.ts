@@ -40,18 +40,16 @@ serverInit().then(async () => {
         }
         area.addAction(x);
     };
-
-
     actionInfo.runningOnServer = true;
+    actionInfo.allActions.forEach(a => {
+        addAction(allUsersAlsoNotLoggedIn, a);
+    });
 
     evilStatics.passwordHelper = {
         generateHash: p => passwordHash.generate(p),
         verify: (p, h) => passwordHash.verify(p, h)
     }
 
-    actionInfo.allActions.forEach(a => {
-        addAction(allUsersAlsoNotLoggedIn, a);
-    });
     let errors = '';
     //add Api Entries
     allEntities.forEach(e => {
