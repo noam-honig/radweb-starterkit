@@ -35,12 +35,15 @@ export class AuthService  {
     getUser() {
         return this.user;
     }
-    async signIn(jwtToken: string) {
+    async signIn(jwtToken: string,rememberOnDevice = false) {
 
 
         if (jwtToken) {
             this.setToken(jwtToken);
-            document.cookie = authToken + "=" + jwtToken;
+            let c = authToken + "=" + jwtToken;
+            if (rememberOnDevice)
+            c+='; expires = Thu, 01 Jan 2076 00:00:00 GMT';
+            document.cookie = c;
             return true;
         }
         else this.signout();
