@@ -10,7 +10,7 @@ import '../app.module';
 import { registerEntitiesOnServer } from "../shared/context";
 
 import { UserInfo } from '../shared/auth/userInfo';
-import { AuthService } from '../shared/auth/auth-service';
+import {  ServerSignIn } from '../shared/auth/auth-service';
 import { JWTCookieAuthorizationHelper } from '../shared/auth/jwt-cookie-authoerization-helper';
 
 serverInit().then(async () => {
@@ -25,7 +25,7 @@ serverInit().then(async () => {
     let eb = new ExpressBridge<UserInfo>(app);
     
     var tokenSignKey = process.env.TOKEN_SIGN_KEY;
-    AuthService.helper = new JWTCookieAuthorizationHelper<UserInfo>(eb, tokenSignKey);
+    ServerSignIn.helper = new JWTCookieAuthorizationHelper<UserInfo>(eb, tokenSignKey);
     
     let apiArea = eb.addArea('/api');
    

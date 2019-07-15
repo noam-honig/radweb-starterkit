@@ -4,7 +4,7 @@ import {  StringColumn } from 'radweb';
 import { Route } from '@angular/router';
 import { Context } from '../../shared/context';
 import { Users } from '../users';
-import { AuthService } from '../../shared/auth/auth-service';
+import { AuthService, ServerSignIn } from '../../shared/auth/auth-service';
 
 
 @Component({
@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
     try {
       let userInfo = this.helpers.currentRow;
       await this.helpers._doSavingRow(userInfo);
-      this.auth.signIn(userInfo.name.value, this.confirmPassword.value);
+      this.auth.signIn(await ServerSignIn.signIn(userInfo.name.value, this.confirmPassword.value));
     }
     catch (err) {
       console.log(err);

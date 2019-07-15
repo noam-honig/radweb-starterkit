@@ -6,7 +6,7 @@ import { DialogService } from '../../select-popup/dialog';
 import { Route } from '@angular/router';
 import { Context } from '../../shared/context';
 import { Users } from '../users';
-import { AuthService } from '../../shared/auth/auth-service';
+import { AuthService, ServerSignIn } from '../../shared/auth/auth-service';
 
 
 @Component({
@@ -58,7 +58,8 @@ export class UpdateInfoComponent implements OnInit {
         this.dialog.Info("Update saved - thanks");
         this.confirmPassword.value = this.helpers.currentRow.password.value ? Users.emptyPassword : '';
         if (passwordChanged) {
-          this.auth.signIn(this.helpers.currentRow.name.value, thePassword);
+          
+          this.auth.signIn(await ServerSignIn.signIn(this.helpers.currentRow.name.value, thePassword));
         }
       }
     }

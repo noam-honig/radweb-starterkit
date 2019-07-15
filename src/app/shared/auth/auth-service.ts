@@ -2,31 +2,26 @@ import { Injectable } from "@angular/core";
 import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
 import { MyRouterService } from '../my-router-service';
 import { HomeComponent } from '../../home/home.component';
-
-
-
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { myRouteData, dummyRoute } from '../../app-routing.module';
 import { UserInfo, Roles } from './userInfo';
-
 import { ContextUserProvider } from '../context-user-provider';
 import { JWTCookieAuthorizationHelper } from './jwt-cookie-authoerization-helper';
 import { RunOnServer } from './server-action';
 import { Context } from '../context';
 import { Users } from '../../users/users';
-import { evilStatics } from './evil-statics';
 
 
 const authToken = 'authorization';
 @Injectable()
-export class AuthService extends ContextUserProvider {
+export class AuthService  {
 
-    
+
     private user: UserInfo;
     constructor(
         private router: MyRouterService
-    ) { 
-        super();
+    ) {
+        
         let c = document.cookie;
         let i = c.indexOf(authToken + '=');
         if (i >= 0) {
@@ -40,21 +35,21 @@ export class AuthService extends ContextUserProvider {
         }
 
     }
-    getUser(){
+    getUser() {
         return this.user;
     }
+    async signIn(jwtToken: string) {
 
-    async signIn(user: string, password: string) {
 
-        let loginResult = await AuthService.signIn(user, password);
-        if (loginResult && loginResult.authToken) {
-            this.setToken(loginResult.authToken);
-            document.cookie = authToken + "=" + loginResult.authToken;
+        if (jwtToken) {
+            this.setToken(jwtToken);
+            document.cookie = authToken + "=" + jwtToken;
             return true;
         }
+        else this.signout();
         return false;
-
     }
+
     private currentToken: string;
     private setToken(token: string) {
         this.currentToken = token;
@@ -75,10 +70,14 @@ export class AuthService extends ContextUserProvider {
         this.user = undefined;
         this.router.navigate(HomeComponent);
     }
-    
+}
 
-    static helper:JWTCookieAuthorizationHelper<UserInfo>;
 
+
+
+export class ServerSignIn {
+
+    static helper: JWTCookieAuthorizationHelper<UserInfo>;
     @RunOnServer({ allowed: () => true })
     static async signIn(user: string, password: string, context?: Context) {
         let result: UserInfo;
@@ -96,18 +95,16 @@ export class AuthService extends ContextUserProvider {
             }
         });
         if (result) {
-            return {
-                valid: true,
-                authToken: AuthService.helper.createSecuredTokenBasedOn(<any>result)
 
-            };
+            return ServerSignIn.helper.createSecuredTokenBasedOn(<any>result)
+
+
         }
-        return { valid: false };
+        return undefined;
     }
 
-
-
 }
+
 
 
 
@@ -128,6 +125,15 @@ export class AuthorizedGuard implements CanActivate {
         if (!(route instanceof dummyRoute))
             this.router.navigate(['/']);
         return false;
+    }
+}
+@Injectable()
+export class AuthServiceContextProvider extends ContextUserProvider {
+    constructor(private authService: AuthService) {
+        super();
+    }
+    getUser() {
+        return this.authService.getUser();
     }
 }
 

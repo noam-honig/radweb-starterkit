@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AuthService } from '../../shared/auth/auth-service';
+import { AuthService, ServerSignIn } from '../../shared/auth/auth-service';
 import { DialogService } from '../../select-popup/dialog';
 
 
@@ -22,7 +22,7 @@ export class SignInComponent implements OnInit {
   async signIn() {
     if (this.canceling)
       return;
-    if (!this.user || this.user.length < 2 || !(await this.authService.signIn(this.user, this.password))) {
+    if (!this.user || this.user.length < 2 || !(await this.authService.signIn(await ServerSignIn.signIn(this.user, this.password)))) {
       this.dialog.YesNoQuestion("Invalid sign in information");
     }
     else
