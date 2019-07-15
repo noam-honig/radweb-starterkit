@@ -122,7 +122,7 @@ export class AuthorizedGuard implements CanActivate {
         if (data && data.allowedRoles)
             allowedRoles = data.allowedRoles;
 
-        if (this.context.hasRole(allowedRoles)) {
+        if (this.context.hasRole(...allowedRoles)) {
             return true;
         }
         if (!(route instanceof dummyRoute))
