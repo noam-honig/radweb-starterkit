@@ -9,6 +9,7 @@ import { PostgresDataProvider } from "radweb-server-postgres";
 
 import { ServerContext, Context } from '../context';
 import { UserInfo } from './userInfo';
+import { SiteArea } from 'radweb-server';
 
 
 interface inArgs {
@@ -59,9 +60,23 @@ export class myServerAction extends Action<inArgs, result,UserInfo>
 export interface RunOnServerOptions {
     allowed: (context: Context) => boolean;
 }
-export const actionInfo = {
+const actionInfo = {
     allActions: [],
     runningOnServer: false
+}
+export function registerActionsOnServer(area: SiteArea<UserInfo>){
+    var addAction = ( a: any) => {
+        let x = <myServerAction>a[serverActionField];
+        if (!x) {
+            throw 'failed to set server action, did you forget the RunOnServerDecorator?';
+        }
+        area.addAction(x);
+    };
+    actionInfo.runningOnServer = true;
+    actionInfo.allActions.forEach(a => {
+        addAction( a);
+    });
+
 }
 export function RunOnServer(options: RunOnServerOptions) {
     return (target, key: string, descriptor: any) => {

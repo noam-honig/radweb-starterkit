@@ -1,12 +1,17 @@
 import { Pool } from 'pg';
 import { config } from 'dotenv';
 import { PostgresDataProvider, PostgrestSchemaBuilder } from 'radweb-server-postgres';
+import * as passwordHash from 'password-hash';
 
 import { foreachSync } from '../shared/utils';
 import { ServerContext, allEntities } from '../shared/context';
 import '../app.module';
 import { evilStatics } from '../shared/auth/evil-statics';
 import { ActualSQLServerDataProvider } from 'radweb-server';
+import { Users } from '../users/users';
+import { AuthService } from '../shared/auth/auth-service';
+import { JWTCookieAuthorizationHelper } from '../shared/auth/jwt-cookie-authoerization-helper';
+import { UserInfo } from '../shared/auth/userInfo';
 
 
 export async function serverInit() {
@@ -32,6 +37,15 @@ export async function serverInit() {
         ssl: ssl
     });
     evilStatics.dataSource = new PostgresDataProvider(pool);
+
+
+    
+
+    
+    Users.passwordHelper = {
+        generateHash: p => passwordHash.generate(p),
+        verify: (p, h) => passwordHash.verify(p, h)
+    }
 
 
     let context = new ServerContext();

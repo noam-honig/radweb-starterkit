@@ -31,12 +31,12 @@ export class AppComponent {
 
   }
   signInText() {
-    if (this.authService.user)
-      return this.authService.user.name;
+    if (this.context.user)
+      return this.context.user.name;
     return 'Sign in';
   }
   signIn() {
-    if (!this.authService.user) {
+    if (!this.context.user) {
         this.dialog.open(SignInComponent);
     }else{
       this.dialogService.YesNoQuestion("Would you like to sign out?",()=>{this.authService.signout()});

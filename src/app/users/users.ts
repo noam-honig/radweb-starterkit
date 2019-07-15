@@ -1,11 +1,8 @@
 import * as radweb from 'radweb';
 import { ColumnSetting, Entity } from "radweb";
 import { IdEntity, changeDate, Id, HasAsyncGetTheValue, checkForDuplicateValue, StringColumn, BoolColumn, updateSettings } from '../shared/types';
-
 import { DataColumnSettings } from 'radweb';
-
 import { Context, MoreDataColumnSettings, EntityClass } from '../shared/context';
-import { evilStatics } from '../shared/auth/evil-statics';
 import { Roles } from '../shared/auth/userInfo';
 
 
@@ -25,7 +22,7 @@ export class Users extends IdEntity<UserId>  {
             onSavingRow: async () => {
                 if (context.onServer) {
                     if (this.password.value && this.password.value != this.password.originalValue && this.password.value != Users.emptyPassword) {
-                        this.realStoredPassword.value = evilStatics.passwordHelper.generateHash(this.password.value);
+                        this.realStoredPassword.value = Users.passwordHelper.generateHash(this.password.value);
                     }
                     if ((await context.for(Users).count()) == 0)
                         this.admin.value = true;
@@ -63,9 +60,17 @@ export class Users extends IdEntity<UserId>  {
     
     
     admin = new BoolColumn();
-  
+    static passwordHelper: PasswordHelper = {
+        generateHash: x => { throw ""; },
+        verify: (x, y) => { throw ""; }
+    };
  
 }
+export interface PasswordHelper {
+    generateHash(password: string): string;
+    verify(password: string, realPasswordHash: string): boolean;
+}
+
 
 export class UserId extends Id implements HasAsyncGetTheValue {
 

@@ -1,4 +1,4 @@
-import { Entity, IDataSettings, GridSettings, Column, NumberColumn, DataList, EntityOptions, ColumnHashSet } from "radweb";
+import { Entity, IDataSettings, GridSettings, Column, NumberColumn, DataList, EntityOptions, ColumnHashSet, DataApi } from "radweb";
 import { EntitySourceFindOptions, FilterBase, FindOptionsPerEntity, DataProviderFactory, DataColumnSettings, DataApiRequest } from "radweb";
 import { foreachSync } from "./utils";
 import { Injectable } from "@angular/core";
@@ -8,6 +8,7 @@ import { evilStatics } from './auth/evil-statics';
 
 import { Roles, UserInfo } from './auth/userInfo';
 import { ContextUserProvider } from './context-user-provider';
+import { SiteArea } from 'radweb-server';
 
 
 
@@ -254,7 +255,29 @@ export class SpecificEntityHelper<lookupIdType, T extends Entity<lookupIdType>> 
 export interface EntityType {
     new(...args: any[]): Entity<any>;
 }
-export const allEntities = [];
+ export const allEntities = [];
+ export function registerEntitiesOnServer(area: SiteArea<UserInfo>){
+    let errors = '';
+    //add Api Entries
+    allEntities.forEach(e => {
+        let x = new ServerContext().for(e).create();
+        if (x instanceof ContextEntity) {
+            let j = x;
+            area.add(r => {
+                let c = new ServerContext();
+                c.setReq(r);
+                let y = j._getEntityApiSettings(c);
+                if (y.allowRead === undefined)
+                    errors += '\r\n' + j.__getName()
+                return new DataApi(c.create(e), y);
+            });
+        }
+    });
+    if (errors.length > 0) {
+        console.log('Security not set for:' + errors);
+    }
+ }
+
 export function EntityClass(theEntityClass: EntityType) {
 
     var original = theEntityClass;
