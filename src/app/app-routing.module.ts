@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, Route, ActivatedRouteSnapshot } from '@angular/router';
-import { HomeComponent } from './home/home.component';
+import { HomeComponent } from './common/sign-in/home/home.component';
 
 import { RegisterComponent } from './users/register/register.component';
 import { UpdateInfoComponent } from './users/update-info/update-info.component';

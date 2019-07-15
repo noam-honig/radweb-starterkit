@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RunOnServer } from '../shared/auth/server-action';
-import { Context } from '../shared/context';
+import { RunOnServer } from '../../../shared/auth/server-action';
+import { Context } from '../../../shared/context';
 
 @Component({
   selector: 'app-home',

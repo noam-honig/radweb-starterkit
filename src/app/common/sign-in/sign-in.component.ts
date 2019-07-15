@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthService } from '../../shared/auth/auth-service';
 import { ServerSignIn } from "../../shared/auth/server-sign-in";
-import { DialogService } from '../../select-popup/dialog';
+import { DialogService } from '../dialog';
+
 
 
 

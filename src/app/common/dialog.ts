@@ -1,10 +1,12 @@
 import { Injectable, NgZone } from "@angular/core";
 import { MatDialog, MatSnackBar } from "@angular/material";
 import { Entity, IDataSettings } from "radweb";
-import { SelectPopupComponent, SelectComponentInfo } from "./select-popup.component";
+
 import { YesNoQuestionComponentData, YesNoQuestionComponent } from "./yes-no-question/yes-no-question.component";
-import { InputAreaComponentData, InputAreaComponent } from "./input-area/input-area.component";
+
 import { Subject } from "rxjs";
+import { InputAreaComponentData, InputAreaComponent } from './input-area/input-area.component';
+import { SelectComponentInfo, SelectPopupComponent } from './select-popup/select-popup.component';
 
 
 @Injectable()

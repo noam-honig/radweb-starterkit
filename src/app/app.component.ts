@@ -2,13 +2,14 @@ import { Component, NgZone, Injector, ViewChild, Injectable } from '@angular/cor
 import { Router, Route, CanActivate, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { MatSidenav, MAT_AUTOCOMPLETE_VALUE_ACCESSOR } from '@angular/material';
 import {MatDialog} from '@angular/material/dialog';
-import { DialogService } from './select-popup/dialog';
+
 
 import { Context } from './shared/context';
 
 import { AuthService } from './shared/auth/auth-service';
 import { SignInComponent } from './common/sign-in/sign-in.component';
 import { dummyRoute } from './app-routing.module';
+import { DialogService } from './common/dialog';
 
 @Component({
   selector: 'app-root',

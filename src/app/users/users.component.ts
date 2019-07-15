@@ -1,18 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-
 import { Users } from './users';
-
-
-import { Route } from '@angular/router';
-
-
 import { Context } from '../shared/context';
-import { DialogService } from '../select-popup/dialog';
-
 import { RunOnServer } from '../shared/auth/server-action';
-import { myRoute } from '../app-routing.module';
 import { Roles } from '../shared/auth/userInfo';
+import { DialogService } from '../common/dialog';
 
 
 @Component({

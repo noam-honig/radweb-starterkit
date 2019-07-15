@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { StringColumn } from 'radweb';
 
-import { DialogService } from '../../select-popup/dialog';
+
 
 import { Route } from '@angular/router';
 import { Context } from '../../shared/context';
 import { Users } from '../users';
 import { AuthService } from '../../shared/auth/auth-service';
 import { ServerSignIn } from "../../shared/auth/server-sign-in";
+import { DialogService } from '../../common/dialog';
 
 
 @Component({

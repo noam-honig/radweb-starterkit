@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { SelectPopupComponent } from '../select-popup.component';
+
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { SelectPopupComponent } from '../select-popup/select-popup.component';
 
 @Component({
   selector: 'app-yes-no-question',
