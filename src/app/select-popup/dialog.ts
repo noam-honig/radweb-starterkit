@@ -55,6 +55,6 @@ export class DialogService {
         this.dialog.open(YesNoQuestionComponent, { data });
     }
     confirmDelete(of: string, onOk: () => void) {
-        this.YesNoQuestion("האם את בטוחה שאת מעוניית למחוק את " + of + "?", onOk);
+        this.YesNoQuestion("Are you sure you would like to delete " + of + "?", onOk);
     }
 }
