@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RadWebModule } from 'radweb';
 import { FormsModule } from '@angular/forms';
 
-import { AuthService, AuthServiceContextUserProvider } from './shared/auth/auth-service';
+import { AuthService } from './shared/auth/auth-service';
 import { DialogService } from './select-popup/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
@@ -76,9 +76,9 @@ import { ContextUserProvider } from './shared/context-user-provider';
     ContextUserProvider,
     Context,
     MyRouterService,
-    AuthServiceContextUserProvider,
     
-    { provide: ContextUserProvider, useClass: AuthServiceContextUserProvider }
+    
+    { provide: ContextUserProvider, useClass: AuthService }
   ],
   entryComponents:[WaitComponent,YesNoQuestionComponent,SignInComponent],
   bootstrap: [AppComponent]

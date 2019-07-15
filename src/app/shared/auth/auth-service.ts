@@ -19,25 +19,14 @@ import { evilStatics } from './evil-statics';
 
 const authToken = 'authorization';
 @Injectable()
-export class AuthService {
+export class AuthService extends ContextUserProvider {
 
-    hasRole(allowedRoles?: string[]) {
-        if (!this.user)
-            return false;
-        if (!allowedRoles)
-            return true;
-        if (!this.user.roles)
-            return false;
-        for (const role of allowedRoles) {
-            if (this.user.roles.indexOf(role) >= 0)
-                return true;
-        }
-        return false;
-    }
-    user: UserInfo;
+    
+    private user: UserInfo;
     constructor(
         private router: MyRouterService
     ) { 
+        super();
         let c = document.cookie;
         let i = c.indexOf(authToken + '=');
         if (i >= 0) {
@@ -50,6 +39,9 @@ export class AuthService {
 
         }
 
+    }
+    getUser(){
+        return this.user;
     }
 
     async signIn(user: string, password: string) {
@@ -121,7 +113,7 @@ export class AuthService {
 
 @Injectable()
 export class AuthorizedGuard implements CanActivate {
-    constructor(private auth: AuthService, private router: Router) {
+    constructor(private context: Context, private router: Router) {
     }
     canActivate(route: ActivatedRouteSnapshot) {
         let allowedRoles: string[];
@@ -130,7 +122,7 @@ export class AuthorizedGuard implements CanActivate {
         if (data && data.allowedRoles)
             allowedRoles = data.allowedRoles;
 
-        if (this.auth.hasRole(allowedRoles)) {
+        if (this.context.hasRole(allowedRoles)) {
             return true;
         }
         if (!(route instanceof dummyRoute))
@@ -140,13 +132,3 @@ export class AuthorizedGuard implements CanActivate {
 }
 
 
-@Injectable()
-export class AuthServiceContextUserProvider extends ContextUserProvider {
-    constructor(private authService: AuthService) {
-        super();
-    }
-    getUser(){
-        return this.authService.user;
-    }
-
-}

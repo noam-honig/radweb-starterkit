@@ -24,12 +24,12 @@ export class Context {
     isLoggedIn() {
         return !!this.user;
     }
-    constructor() {
+    constructor(private userProvider?: ContextUserProvider) {
 
     }
 
-    userProvider?: ContextUserProvider;
-    protected _getInfo = () => undefined;//this.userProvider.getUser();
+    
+    protected _getInfo = () => this.userProvider.getUser();
     protected _dataSource = evilStatics.dataSource;
     protected _onServer = false;
     get onServer(): boolean {
