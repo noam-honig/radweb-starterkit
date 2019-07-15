@@ -6,7 +6,8 @@ import { DialogService } from '../../select-popup/dialog';
 import { Route } from '@angular/router';
 import { Context } from '../../shared/context';
 import { Users } from '../users';
-import { AuthService, ServerSignIn } from '../../shared/auth/auth-service';
+import { AuthService } from '../../shared/auth/auth-service';
+import { ServerSignIn } from "../../shared/auth/server-sign-in";
 
 
 @Component({

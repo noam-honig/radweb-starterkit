@@ -4,12 +4,9 @@ import { MyRouterService } from '../my-router-service';
 import { HomeComponent } from '../../home/home.component';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { myRouteData, dummyRoute } from '../../app-routing.module';
-import { UserInfo, Roles } from './userInfo';
+import { UserInfo } from './userInfo';
 import { ContextUserProvider } from '../context-user-provider';
-import { JWTCookieAuthorizationHelper } from './jwt-cookie-authoerization-helper';
-import { RunOnServer } from './server-action';
 import { Context } from '../context';
-import { Users } from '../../users/users';
 
 
 const authToken = 'authorization';
@@ -70,39 +67,6 @@ export class AuthService  {
         this.user = undefined;
         this.router.navigate(HomeComponent);
     }
-}
-
-
-
-
-export class ServerSignIn {
-
-    static helper: JWTCookieAuthorizationHelper<UserInfo>;
-    @RunOnServer({ allowed: () => true })
-    static async signIn(user: string, password: string, context?: Context) {
-        let result: UserInfo;
-        await context.for(Users).foreach(h => h.name.isEqualTo(user), async h => {
-            if (!h.realStoredPassword.value || Users.passwordHelper.verify(password, h.realStoredPassword.value)) {
-                result = {
-                    id: h.id.value,
-                    roles: [],
-                    name: h.name.value
-                };
-                if (h.admin.value) {
-                    result.roles.push(Roles.superAdmin);
-                }
-
-            }
-        });
-        if (result) {
-
-            return ServerSignIn.helper.createSecuredTokenBasedOn(<any>result)
-
-
-        }
-        return undefined;
-    }
-
 }
 
 

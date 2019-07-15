@@ -10,11 +10,10 @@ import '../app.module';
 import { registerEntitiesOnServer } from "../shared/context";
 
 import { UserInfo } from '../shared/auth/userInfo';
-import {  ServerSignIn } from '../shared/auth/auth-service';
+import { ServerSignIn } from "../shared/auth/server-sign-in";
 import { JWTCookieAuthorizationHelper } from '../shared/auth/jwt-cookie-authoerization-helper';
 
 serverInit().then(async () => {
-
 
     let app = express();
     app.use(compression());
