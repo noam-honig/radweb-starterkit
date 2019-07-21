@@ -11,14 +11,14 @@ import { Context } from '../context';
 
 const authToken = 'authorization';
 @Injectable()
-export class AuthService  {
+export class AuthService {
 
 
     private user: UserInfo;
     constructor(
         private router: MyRouterService
     ) {
-        
+
         let c = document.cookie;
         let i = c.indexOf(authToken + '=');
         if (i >= 0) {
@@ -35,14 +35,14 @@ export class AuthService  {
     getUser() {
         return this.user;
     }
-    async signIn(jwtToken: string,rememberOnDevice = false) {
+    async signIn(jwtToken: string, rememberOnDevice = false) {
 
 
         if (jwtToken) {
             this.setToken(jwtToken);
             let c = authToken + "=" + jwtToken;
             if (rememberOnDevice)
-            c+='; expires = Thu, 01 Jan 2076 00:00:00 GMT';
+                c += '; expires = Thu, 01 Jan 2076 00:00:00 GMT';
             document.cookie = c;
             return true;
         }
@@ -92,6 +92,18 @@ export class AuthorizedGuard implements CanActivate {
         if (!(route instanceof dummyRoute))
             this.router.navigate(['/']);
         return false;
+    }
+}
+@Injectable()
+export class NotLoggedInGuard implements CanActivate {
+    constructor(private context: Context, private router: Router) {
+    }
+    canActivate(route: ActivatedRouteSnapshot) {
+        let allowedRoles: string[];
+        if (this.context.user)
+            return false;
+        return true;
+        
     }
 }
 @Injectable()

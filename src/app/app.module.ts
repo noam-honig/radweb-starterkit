@@ -11,7 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RadWebModule } from 'radweb';
 import { FormsModule } from '@angular/forms';
 
-import { AuthService, AuthServiceContextProvider } from './shared/auth/auth-service';
+import { AuthService, AuthServiceContextProvider, AuthorizedGuard, NotLoggedInGuard } from './shared/auth/auth-service';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
@@ -72,7 +72,8 @@ import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question
     RadWebModule
   ],
   providers: [
-    
+    NotLoggedInGuard,
+    AuthorizedGuard,
     AuthService,
     DialogService,
     BusyService,
