@@ -1,12 +1,13 @@
 import { Injectable } from "@angular/core";
 import { Router, CanActivate, ActivatedRouteSnapshot } from "@angular/router";
 import { MyRouterService } from '../my-router-service';
-import { HomeComponent } from '../../common/sign-in/home/home.component';
+import { HomeComponent } from '../../home/home.component';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { myRouteData, dummyRoute } from '../../app-routing.module';
 import { UserInfo } from './userInfo';
 import { ContextUserProvider } from '../context-user-provider';
 import { Context } from '../context';
+
 
 
 const authToken = 'authorization';

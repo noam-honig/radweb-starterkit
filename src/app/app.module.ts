@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { RadWebModule } from 'radweb';
+import { RadWebModule, SelectPopup } from 'radweb';
 import { FormsModule } from '@angular/forms';
 
 import { AuthService, AuthServiceContextProvider, AuthorizedGuard, NotLoggedInGuard } from './shared/auth/auth-service';
@@ -24,7 +24,7 @@ import { UsersComponent } from './users/users.component';
 
 import { UpdateInfoComponent } from './users/update-info/update-info.component';
 import { RegisterComponent } from './users/register/register.component';
-import { HomeComponent } from './common/sign-in/home/home.component';
+import { HomeComponent } from './home/home.component';
 
 import { WaitComponent } from './shared/wait/wait.component';
 
@@ -34,6 +34,8 @@ import { ContextUserProvider } from './shared/context-user-provider';
 import { DialogService } from './common/dialog';
 import { BusyService } from './common/busy-service';
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
+import { InputAreaComponent } from './common/input-area/input-area.component';
+import { SelectPopupComponent } from './common/select-popup/select-popup.component';
 
 
 
@@ -49,7 +51,8 @@ import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question
     YesNoQuestionComponent,
     HomeComponent,
     SignInComponent,
-    
+    SelectPopupComponent,
+    InputAreaComponent,
 
   ],
   imports: [
@@ -80,6 +83,8 @@ import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question
     ContextUserProvider,
     Context,
     MyRouterService,
+    SelectPopupComponent,
+    InputAreaComponent,
     
     
     { provide: ContextUserProvider, useClass: AuthServiceContextProvider }

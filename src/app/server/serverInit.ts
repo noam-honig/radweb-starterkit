@@ -9,9 +9,6 @@ import '../app.module';
 import { evilStatics } from '../shared/auth/evil-statics';
 import { ActualSQLServerDataProvider } from 'radweb-server';
 import { Users } from '../users/users';
-import { AuthService } from '../shared/auth/auth-service';
-import { JWTCookieAuthorizationHelper } from '../shared/auth/jwt-cookie-authoerization-helper';
-import { UserInfo } from '../shared/auth/userInfo';
 
 
 export async function serverInit() {
@@ -21,32 +18,24 @@ export async function serverInit() {
     if (process.env.DISABLE_POSTGRES_SSL)
         ssl = false;
 
-        if (process.env.logSqls) {
-            ActualSQLServerDataProvider.LogToConsole = true;
-        }
+    if (process.env.logSqls) {
+        ActualSQLServerDataProvider.LogToConsole = true;
+    }
 
     if (!process.env.DATABASE_URL) {
         console.log("No DATABASE_URL environment variable found, if you are developing locally, please add a '.env' with DATABASE_URL='postgres://*USERNAME*:*PASSWORD*@*HOST*:*PORT*/*DATABASE*'");
     }
     let dbUrl = process.env.DATABASE_URL;
-    
-
-    
     const pool = new Pool({
         connectionString: dbUrl,
         ssl: ssl
     });
     evilStatics.dataSource = new PostgresDataProvider(pool);
 
-
-    
-
-    
     Users.passwordHelper = {
         generateHash: p => passwordHash.generate(p),
         verify: (p, h) => passwordHash.verify(p, h)
     }
-
 
     let context = new ServerContext();
     var sb = new PostgrestSchemaBuilder(pool);
@@ -58,7 +47,7 @@ export async function serverInit() {
     });
 
 
-   
+
 
 
 
