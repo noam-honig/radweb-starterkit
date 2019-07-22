@@ -6,7 +6,7 @@ import * as passwordHash from 'password-hash';
 import { foreachSync } from '../shared/utils';
 import { ServerContext, allEntities } from '../shared/context';
 import '../app.module';
-import { evilStatics } from '../shared/auth/evil-statics';
+
 import { ActualSQLServerDataProvider } from 'radweb-server';
 import { Users } from '../users/users';
 
@@ -30,7 +30,7 @@ export async function serverInit() {
         connectionString: dbUrl,
         ssl: ssl
     });
-    evilStatics.dataSource = new PostgresDataProvider(pool);
+    
 
     Users.passwordHelper = {
         generateHash: p => passwordHash.generate(p),
@@ -45,6 +45,7 @@ export async function serverInit() {
             await sb.verifyAllColumns(x);
         }
     });
+    return new PostgresDataProvider(pool);
 
 
 

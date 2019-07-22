@@ -1,15 +1,10 @@
-import { Entity, IDataSettings, GridSettings, Column, NumberColumn, DataList, EntityOptions, ColumnHashSet, DataApi } from "radweb";
+import { Entity, IDataSettings, GridSettings, Column, NumberColumn, DataList, EntityOptions, ColumnHashSet, DataApi, RestDataProvider, InMemoryDataProvider } from "radweb";
 import { EntitySourceFindOptions, FilterBase, FindOptionsPerEntity, DataProviderFactory, DataColumnSettings, DataApiRequest } from "radweb";
 import { foreachSync } from "./utils";
 import { Injectable } from "@angular/core";
 import { DataApiSettings } from "radweb";
-import { evilStatics } from './auth/evil-statics';
-
-
 import { Roles, UserInfo } from './auth/userInfo';
-
 import { SiteArea } from 'radweb-server';
-
 
 
 @Injectable()
@@ -30,7 +25,7 @@ export class Context {
 
 
 
-    protected _dataSource = evilStatics.dataSource;
+    protected _dataSource: DataProviderFactory = new RestDataProvider(Context.apiBaseUrl);
     protected _onServer = false;
     get onServer(): boolean {
         return this._onServer;
@@ -41,6 +36,7 @@ export class Context {
     _setUser(info: UserInfo) {
         this._user = info;
     }
+    static apiBaseUrl = 'api';
 
     hasRole(...allowedRoles: string[]) {
         if (!this.user)
@@ -122,7 +118,7 @@ export class ContextEntity<idType> extends Entity<idType>{
             }
             return this.__context.create(this.entityType);
 
-        }, evilStatics.dataSource, buildEntityOptions(contextEntityOptions));
+        }, new InMemoryDataProvider(), buildEntityOptions(contextEntityOptions));
         this._noContextErrorWithStack = new Error('@EntityClass not used or context was not set for' + this.constructor.name);
     }
     private __context: Context;
@@ -204,7 +200,7 @@ class stamEntity extends Entity<number> {
 
     id = new NumberColumn();
     constructor() {
-        super(() => new stamEntity(), evilStatics.dataSource, "stamEntity");
+        super(() => new stamEntity(), new InMemoryDataProvider(), "stamEntity");
         this.initColumns();
     }
 }
@@ -259,7 +255,7 @@ export interface EntityType {
     new(...args: any[]): Entity<any>;
 }
 export const allEntities = [];
-export function registerEntitiesOnServer(area: SiteArea<UserInfo>) {
+export function registerEntitiesOnServer(area: SiteArea<UserInfo>, dataProvider: DataProviderFactory) {
     let errors = '';
     //add Api Entries
     allEntities.forEach(e => {
@@ -268,6 +264,7 @@ export function registerEntitiesOnServer(area: SiteArea<UserInfo>) {
             let j = x;
             area.add(r => {
                 let c = new ServerContext();
+                c.setDataProvider(dataProvider);
                 c.setReq(r);
                 let y = j._getEntityApiSettings(c);
                 if (y.allowRead === undefined)

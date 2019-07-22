@@ -7,13 +7,13 @@ import * as fs from 'fs';
 import { serverInit } from './serverInit';
 import { registerActionsOnServer } from "../shared/auth/server-action";
 import '../app.module';
-import { registerEntitiesOnServer } from "../shared/context";
+import { registerEntitiesOnServer, Context } from "../shared/context";
 
 import { UserInfo } from '../shared/auth/userInfo';
 import { ServerSignIn } from "../shared/auth/server-sign-in";
 import { JWTCookieAuthorizationHelper } from '../shared/auth/jwt-cookie-authoerization-helper';
 
-serverInit().then(async () => {
+serverInit().then(async (dataSource) => {
 
     let app = express();
     app.use(compression());
@@ -22,14 +22,14 @@ serverInit().then(async () => {
         app.use(secure);
 
     let eb = new ExpressBridge<UserInfo>(app);
-    
+
     var tokenSignKey = process.env.TOKEN_SIGN_KEY;
     ServerSignIn.helper = new JWTCookieAuthorizationHelper<UserInfo>(eb, tokenSignKey);
-    
-    let apiArea = eb.addArea('/api');
-   
-    registerActionsOnServer(apiArea);
-    registerEntitiesOnServer(apiArea);
+
+    let apiArea = eb.addArea('/' + Context.apiBaseUrl);
+
+    registerActionsOnServer(apiArea, dataSource);
+    registerEntitiesOnServer(apiArea, dataSource);
 
     app.use(express.static('dist'));
 

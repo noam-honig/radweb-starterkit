@@ -1,7 +1,7 @@
-import { Action } from "radweb";
+import { Action, DataProvider, DataProviderFactory } from "radweb";
 
 
-import { evilStatics } from "./evil-statics";
+
 import { DataApiRequest } from "radweb";
 import 'reflect-metadata';
 
@@ -23,11 +23,12 @@ interface result {
 export class myServerAction extends Action<inArgs, result,UserInfo>
 {
     constructor(name: string, private types: any[], private options: RunOnServerOptions, private originalMethod: (args: any[]) => any) {
-        super( 'api/', name)
+        super( Context.apiBaseUrl+'/', name)
     }
+    dataSource:DataProviderFactory;
     protected async execute(info: inArgs, req: DataApiRequest<UserInfo>): Promise<result> {
         let result = { data: {} };
-        await (<PostgresDataProvider>evilStatics.dataSource).doInTransaction(async ds => {
+        await (<PostgresDataProvider>this.dataSource).doInTransaction(async ds => {
             let context = new ServerContext();
             context.setReq(req);
             context.setDataProvider(ds);
@@ -64,12 +65,13 @@ const actionInfo = {
     allActions: [],
     runningOnServer: false
 }
-export function registerActionsOnServer(area: SiteArea<UserInfo>){
+export function registerActionsOnServer(area: SiteArea<UserInfo>,dataSource:DataProviderFactory){
     var addAction = ( a: any) => {
         let x = <myServerAction>a[serverActionField];
         if (!x) {
             throw 'failed to set server action, did you forget the RunOnServerDecorator?';
         }
+        x.dataSource= dataSource;
         area.addAction(x);
     };
     actionInfo.runningOnServer = true;
