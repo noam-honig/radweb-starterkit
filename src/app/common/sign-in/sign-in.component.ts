@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AuthService } from '../../shared/auth/auth-service';
+import { JwtSessionManager } from '../../shared/auth/jwt-session-manager';
 import { ServerSignIn } from "../../shared/auth/server-sign-in";
 import { DialogService } from '../dialog';
 
@@ -15,7 +15,7 @@ import { DialogService } from '../dialog';
 export class SignInComponent implements OnInit {
 
   constructor(private dialog: DialogService,
-    private authService: AuthService,
+    private authService: JwtSessionManager,
     public dialogRef: MatDialogRef<SignInComponent>) { }
   user: string;
   password: string;
@@ -24,7 +24,7 @@ export class SignInComponent implements OnInit {
   async signIn() {
     if (this.canceling)
       return;
-    if (!this.user || this.user.length < 2 || !(await this.authService.signIn(await ServerSignIn.signIn(this.user, this.password)))) {
+    if (!this.user || this.user.length < 2 || !(await this.authService.setToken(await ServerSignIn.signIn(this.user, this.password)))) {
       this.dialog.YesNoQuestion("Invalid sign in information");
     }
     else

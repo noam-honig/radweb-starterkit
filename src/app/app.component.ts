@@ -1,15 +1,16 @@
-import { Component, NgZone, Injector, ViewChild, Injectable } from '@angular/core';
-import { Router, Route, CanActivate, ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
-import { MatSidenav, MAT_AUTOCOMPLETE_VALUE_ACCESSOR } from '@angular/material';
-import {MatDialog} from '@angular/material/dialog';
+import { Component, Injector, ViewChild } from '@angular/core';
+import { Router, Route, CanActivate, ActivatedRoute } from '@angular/router';
+import { MatSidenav } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 
 import { Context } from './shared/context';
 
-import { AuthService } from './shared/auth/auth-service';
+
 import { SignInComponent } from './common/sign-in/sign-in.component';
 import { dummyRoute } from './app-routing.module';
 import { DialogService } from './common/dialog';
+import { JwtSessionManager } from './shared/auth/jwt-session-manager';
 
 @Component({
   selector: 'app-root',
@@ -20,15 +21,15 @@ export class AppComponent {
 
 
   constructor(
-    public auth: AuthService,
+    public auth: JwtSessionManager,
     public router: Router,
     public activeRoute: ActivatedRoute,
     private injector: Injector,
     private dialog: MatDialog,
-    private authService: AuthService,
-    public dialogService:DialogService,
-    public context: Context) {
     
+    public dialogService: DialogService,
+    public context: Context) {
+    auth.loadSessionFromCookie();
 
   }
   signInText() {
@@ -38,9 +39,9 @@ export class AppComponent {
   }
   signIn() {
     if (!this.context.user) {
-        this.dialog.open(SignInComponent);
-    }else{
-      this.dialogService.YesNoQuestion("Would you like to sign out?",()=>{this.authService.signout()});
+      this.dialog.open(SignInComponent);
+    } else {
+      this.dialogService.YesNoQuestion("Would you like to sign out?", () => { this.auth.signout() });
     }
   }
 
@@ -53,7 +54,7 @@ export class AppComponent {
 
   currentTitle() {
     if (this.activeRoute && this.activeRoute.snapshot && this.activeRoute.firstChild)
-      if (this.activeRoute.firstChild.data && this.activeRoute.snapshot.firstChild.data.name){
+      if (this.activeRoute.firstChild.data && this.activeRoute.snapshot.firstChild.data.name) {
         return this.activeRoute.snapshot.firstChild.data.name;
       }
       else {

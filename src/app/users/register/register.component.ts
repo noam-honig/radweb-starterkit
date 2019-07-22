@@ -4,8 +4,9 @@ import {  StringColumn } from 'radweb';
 import { Route } from '@angular/router';
 import { Context } from '../../shared/context';
 import { Users } from '../users';
-import { AuthService } from '../../shared/auth/auth-service';
+
 import { ServerSignIn } from "../../shared/auth/server-sign-in";
+import { JwtSessionManager } from '../../shared/auth/jwt-session-manager';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { ServerSignIn } from "../../shared/auth/server-sign-in";
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  constructor(private auth: AuthService,private context:Context) {
+  constructor(private auth: JwtSessionManager,private context:Context) {
 
 
   }
@@ -48,7 +49,7 @@ export class RegisterComponent implements OnInit {
     try {
       let userInfo = this.helpers.currentRow;
       await this.helpers._doSavingRow(userInfo);
-      this.auth.signIn(await ServerSignIn.signIn(userInfo.name.value, this.confirmPassword.value));
+      this.auth.setToken(await ServerSignIn.signIn(userInfo.name.value, this.confirmPassword.value));
     }
     catch (err) {
       console.log(err);

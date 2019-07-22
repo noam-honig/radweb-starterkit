@@ -5,21 +5,24 @@ import { HomeComponent } from '../../home/home.component';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { myRouteData, dummyRoute } from '../../app-routing.module';
 import { UserInfo } from './userInfo';
-import { ContextUserProvider } from '../context-user-provider';
 import { Context } from '../context';
 
 
 
 const authToken = 'authorization';
 @Injectable()
-export class AuthService {
+export class JwtSessionManager {
 
 
-    private user: UserInfo;
+
     constructor(
-        private router: MyRouterService
+        private context: Context
     ) {
 
+
+
+    }
+    loadSessionFromCookie() {
         let c = document.cookie;
         let i = c.indexOf(authToken + '=');
         if (i >= 0) {
@@ -28,19 +31,16 @@ export class AuthService {
             if (i >= 0) {
                 c = c.substring(0, i - 1);
             }
-            this.setToken(c);
+            this._setToken(c);
 
         }
+    }
 
-    }
-    getUser() {
-        return this.user;
-    }
-    async signIn(jwtToken: string, rememberOnDevice = false) {
+    async setToken(jwtToken: string, rememberOnDevice = false) {
 
 
         if (jwtToken) {
-            this.setToken(jwtToken);
+            this._setToken(jwtToken);
             let c = authToken + "=" + jwtToken;
             if (rememberOnDevice)
                 c += '; expires = Thu, 01 Jan 2076 00:00:00 GMT';
@@ -52,24 +52,21 @@ export class AuthService {
     }
 
     private currentToken: string;
-    private setToken(token: string) {
+    private _setToken(token: string) {
         this.currentToken = token;
-        this.user = undefined;
+        let user: UserInfo = undefined;
         if (this.currentToken) {
             {
-                try { this.user = new JwtHelperService().decodeToken(token); }
+                try { user = new JwtHelperService().decodeToken(token); }
                 catch (err) { console.log(err); }
-
             }
-
         }
+        this.context._setUser(user);
     }
 
     signout(): any {
-        this.setToken('');
+        this._setToken('');
         document.cookie = authToken + '=; expires = Thu, 01 Jan 1970 00:00:00 GMT';
-        this.user = undefined;
-        this.router.navigate(HomeComponent);
     }
 }
 
@@ -104,17 +101,6 @@ export class NotLoggedInGuard implements CanActivate {
         if (this.context.user)
             return false;
         return true;
-        
+
     }
 }
-@Injectable()
-export class AuthServiceContextProvider extends ContextUserProvider {
-    constructor(private authService: AuthService) {
-        super();
-    }
-    getUser() {
-        return this.authService.getUser();
-    }
-}
-
-

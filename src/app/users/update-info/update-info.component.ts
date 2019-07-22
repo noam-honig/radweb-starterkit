@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { StringColumn } from 'radweb';
-
-
-
-import { Route } from '@angular/router';
 import { Context } from '../../shared/context';
 import { Users } from '../users';
-import { AuthService } from '../../shared/auth/auth-service';
+
 import { ServerSignIn } from "../../shared/auth/server-sign-in";
 import { DialogService } from '../../common/dialog';
+import { JwtSessionManager } from '../../shared/auth/jwt-session-manager';
 
 
 @Component({
@@ -18,7 +15,7 @@ import { DialogService } from '../../common/dialog';
 })
 export class UpdateInfoComponent implements OnInit {
   constructor(private dialog: DialogService,
-    private auth: AuthService,
+    private auth: JwtSessionManager,
     private context: Context) {
 
 
@@ -61,7 +58,7 @@ export class UpdateInfoComponent implements OnInit {
         this.confirmPassword.value = this.helpers.currentRow.password.value ? Users.emptyPassword : '';
         if (passwordChanged) {
           
-          this.auth.signIn(await ServerSignIn.signIn(this.helpers.currentRow.name.value, thePassword));
+          this.auth.setToken(await ServerSignIn.signIn(this.helpers.currentRow.name.value, thePassword));
         }
       }
     }

@@ -7,7 +7,7 @@ import { evilStatics } from './auth/evil-statics';
 
 
 import { Roles, UserInfo } from './auth/userInfo';
-import { ContextUserProvider } from './context-user-provider';
+
 import { SiteArea } from 'radweb-server';
 
 
@@ -24,21 +24,24 @@ export class Context {
     isLoggedIn() {
         return !!this.user;
     }
-    constructor(private userProvider?: ContextUserProvider) {
+    constructor() {
 
     }
 
-    
-    protected _getInfo = () => this.userProvider.getUser();
+
+
     protected _dataSource = evilStatics.dataSource;
     protected _onServer = false;
     get onServer(): boolean {
         return this._onServer;
     }
+    protected _user: UserInfo;
+    get user() { return this._user; }
 
-    get user(): UserInfo {
-        return this._getInfo();
+    _setUser(info: UserInfo) {
+        this._user = info;
     }
+
     hasRole(...allowedRoles: string[]) {
         if (!this.user)
             return false;
@@ -77,7 +80,7 @@ export class ServerContext extends Context {
     constructor() {
         super();
         this._onServer = true;
-        this._getInfo = () => undefined;
+
 
     }
 
@@ -85,7 +88,7 @@ export class ServerContext extends Context {
 
     setReq(req: DataApiRequest<UserInfo>) {
         this.req = req;
-        this._getInfo = () => req.authInfo ? req.authInfo : undefined;
+        this._user = req.authInfo ? req.authInfo : undefined;
     }
     setDataProvider(dataProvider: DataProviderFactory) {
         this._dataSource = dataProvider;
@@ -255,8 +258,8 @@ export class SpecificEntityHelper<lookupIdType, T extends Entity<lookupIdType>> 
 export interface EntityType {
     new(...args: any[]): Entity<any>;
 }
- export const allEntities = [];
- export function registerEntitiesOnServer(area: SiteArea<UserInfo>){
+export const allEntities = [];
+export function registerEntitiesOnServer(area: SiteArea<UserInfo>) {
     let errors = '';
     //add Api Entries
     allEntities.forEach(e => {
@@ -276,7 +279,7 @@ export interface EntityType {
     if (errors.length > 0) {
         console.log('Security not set for:' + errors);
     }
- }
+}
 
 export function EntityClass(theEntityClass: EntityType) {
 

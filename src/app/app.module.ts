@@ -8,10 +8,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { RadWebModule, SelectPopup } from 'radweb';
+import { RadWebModule } from 'radweb';
 import { FormsModule } from '@angular/forms';
 
-import { AuthService, AuthServiceContextProvider, AuthorizedGuard, NotLoggedInGuard } from './shared/auth/auth-service';
+
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
@@ -30,12 +30,13 @@ import { WaitComponent } from './shared/wait/wait.component';
 
 import { MyRouterService } from './shared/my-router-service';
 import { SignInComponent } from './common/sign-in/sign-in.component';
-import { ContextUserProvider } from './shared/context-user-provider';
+
 import { DialogService } from './common/dialog';
 import { BusyService } from './common/busy-service';
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
 import { InputAreaComponent } from './common/input-area/input-area.component';
 import { SelectPopupComponent } from './common/select-popup/select-popup.component';
+import { NotLoggedInGuard, AuthorizedGuard, JwtSessionManager } from './shared/auth/jwt-session-manager';
 
 
 
@@ -77,17 +78,14 @@ import { SelectPopupComponent } from './common/select-popup/select-popup.compone
   providers: [
     NotLoggedInGuard,
     AuthorizedGuard,
-    AuthService,
+    JwtSessionManager,
     DialogService,
     BusyService,
-    ContextUserProvider,
+    
     Context,
     MyRouterService,
     SelectPopupComponent,
-    InputAreaComponent,
-    
-    
-    { provide: ContextUserProvider, useClass: AuthServiceContextProvider }
+    InputAreaComponent
   ],
   entryComponents:[WaitComponent,YesNoQuestionComponent,SignInComponent],
   bootstrap: [AppComponent]

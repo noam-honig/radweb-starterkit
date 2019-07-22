@@ -7,7 +7,7 @@ import { UpdateInfoComponent } from './users/update-info/update-info.component';
 
 import { UsersComponent } from './users/users.component';
 import { Roles } from './shared/auth/userInfo';
-import { AuthorizedGuard, NotLoggedInGuard } from './shared/auth/auth-service';
+import { AuthorizedGuard, NotLoggedInGuard } from './shared/auth/jwt-session-manager';
 
 const routes: myRoute[] = [
   { path: 'Home', component: HomeComponent },
