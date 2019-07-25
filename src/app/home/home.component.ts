@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RunOnServer } from '../shared/auth/server-action';
-import { Context } from '../shared/context';
+import { Context } from 'radweb';
 
 @Component({
   selector: 'app-home',

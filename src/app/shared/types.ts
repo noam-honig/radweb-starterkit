@@ -2,7 +2,7 @@ import * as uuid from 'uuid';
 import * as radweb from 'radweb';
 import {  Entity, Column, SortSegment, DateTimeColumn } from "radweb";
 
-import { ContextEntity, ContextEntityOptions, MoreDataColumnSettings, hasMoreDataColumnSettings } from './context';
+import { ContextEntity, ContextEntityOptions, MoreDataColumnSettings, hasMoreDataColumnSettings } from 'radweb';
 
 export class IdEntity<idType extends Id> extends ContextEntity<string>
 {

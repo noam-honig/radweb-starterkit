@@ -6,7 +6,7 @@ import { PostgresDataProvider, PostgrestSchemaBuilder } from 'radweb-server-post
 import * as passwordHash from 'password-hash';
 
 import { foreachSync } from '../shared/utils';
-import { ServerContext, allEntities } from '../shared/context';
+import { ServerContext, allEntities } from 'radweb';
 import '../app.module';
 
 import { ActualSQLServerDataProvider } from 'radweb-server';

@@ -4,7 +4,7 @@ import { MatSidenav } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 
 
-import { Context } from './shared/context';
+import { Context } from 'radweb';
 
 
 import { SignInComponent } from './common/sign-in/sign-in.component';

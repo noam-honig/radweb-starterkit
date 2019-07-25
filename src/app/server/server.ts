@@ -1,4 +1,4 @@
-import {CustomModuleLoader} from '../../../../radweb/src/app/server/CustomModuleLoader';
+import { CustomModuleLoader } from '../../../../radweb/src/app/server/CustomModuleLoader';
 let moduleLoader = new CustomModuleLoader('/dist-server/radweb');
 import * as express from 'express';
 import * as secure from 'express-force-https';
@@ -8,9 +8,10 @@ import * as fs from 'fs';
 import { serverInit } from './serverInit';
 import { registerActionsOnServer } from "../shared/auth/server-action";
 import '../app.module';
-import { registerEntitiesOnServer, Context } from "../shared/context";
+import { Context, UserInfo } from "radweb";
+import { registerEntitiesOnServer } from "radweb-server";
 
-import { UserInfo } from '../shared/auth/userInfo';
+
 import { ServerSignIn } from "../shared/auth/server-sign-in";
 import { JWTCookieAuthorizationHelper } from '../shared/auth/jwt-cookie-authoerization-helper';
 

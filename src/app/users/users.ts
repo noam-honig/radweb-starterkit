@@ -2,7 +2,7 @@ import * as radweb from 'radweb';
 import { ColumnSetting, Entity } from "radweb";
 import { IdEntity, changeDate, Id, HasAsyncGetTheValue, checkForDuplicateValue, StringColumn, BoolColumn, updateSettings } from '../shared/types';
 import { DataColumnSettings } from 'radweb';
-import { Context, MoreDataColumnSettings, EntityClass } from '../shared/context';
+import { Context, MoreDataColumnSettings, EntityClass } from 'radweb';
 import { Roles } from '../shared/auth/userInfo';
 
 

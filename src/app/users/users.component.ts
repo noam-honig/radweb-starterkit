@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Users } from './users';
-import { Context } from '../shared/context';
+import { Context } from 'radweb';
 import { RunOnServer } from '../shared/auth/server-action';
 import { Roles } from '../shared/auth/userInfo';
 import { DialogService } from '../common/dialog';
@@ -45,7 +45,7 @@ export class UsersComponent implements OnInit {
     });
 
   }
-  @RunOnServer({ allowed: c => c.isAdmin() })
+  @RunOnServer({ allowed: c => c.hasRole(Roles.superAdmin) })
   static async resetPassword(helperId: string, context?: Context) {
 
     await context.for(Users).foreach(h => h.id.isEqualTo(helperId), async h => {

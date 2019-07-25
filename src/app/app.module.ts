@@ -18,7 +18,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { Context } from './shared/context';
+import { Context } from 'radweb';
 import { MatButtonModule, MatFormFieldModule, MatInputModule, MatProgressSpinnerModule } from '@angular/material';
 import { UsersComponent } from './users/users.component';
 

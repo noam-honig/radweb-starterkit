@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import {  StringColumn } from 'radweb';
 import { Route } from '@angular/router';
-import { Context } from '../../shared/context';
+import { Context } from 'radweb';
 import { Users } from '../users';
 
 import { ServerSignIn } from "../../shared/auth/server-sign-in";
