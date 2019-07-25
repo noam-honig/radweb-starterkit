@@ -4,8 +4,8 @@ import { MyRouterService } from '../my-router-service';
 import { HomeComponent } from '../../home/home.component';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { myRouteData, dummyRoute } from '../../app-routing.module';
-import { UserInfo } from './userInfo';
-import { Context } from '../context';
+
+import { Context,UserInfo } from '../context';
 
 
 

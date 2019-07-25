@@ -8,9 +8,9 @@ import * as fs from 'fs';
 import { serverInit } from './serverInit';
 import { registerActionsOnServer } from "../shared/auth/server-action";
 import '../app.module';
-import { registerEntitiesOnServer, Context } from "../shared/context";
+import { registerEntitiesOnServer, Context,UserInfo } from "../shared/context";
 
-import { UserInfo } from '../shared/auth/userInfo';
+
 import { ServerSignIn } from "../shared/auth/server-sign-in";
 import { JWTCookieAuthorizationHelper } from '../shared/auth/jwt-cookie-authoerization-helper';
 
