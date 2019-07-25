@@ -1,5 +1,5 @@
 import { Roles } from './userInfo';
-import { JWTCookieAuthorizationHelper } from './jwt-cookie-authoerization-helper';
+import { JWTCookieAuthorizationHelper } from 'radweb-server';
 import { RunOnServer } from './server-action';
 import { UserInfo, Context } from 'radweb';
 import { Users } from '../../users/users';

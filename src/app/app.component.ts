@@ -8,9 +8,9 @@ import { Context } from 'radweb';
 
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
-import { dummyRoute } from './app-routing.module';
+import { dummyRoute } from 'radweb';
 import { DialogService } from './common/dialog';
-import { JwtSessionManager } from './shared/auth/jwt-session-manager';
+import { JwtSessionManager } from 'radweb';
 
 @Component({
   selector: 'app-root',

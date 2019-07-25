@@ -6,7 +6,7 @@ import { Context } from 'radweb';
 import { Users } from '../users';
 
 import { ServerSignIn } from "../../shared/auth/server-sign-in";
-import { JwtSessionManager } from '../../shared/auth/jwt-session-manager';
+import { JwtSessionManager } from 'radweb';
 
 
 @Component({

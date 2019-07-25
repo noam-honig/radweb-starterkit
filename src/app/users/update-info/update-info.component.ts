@@ -5,7 +5,7 @@ import { Users } from '../users';
 
 import { ServerSignIn } from "../../shared/auth/server-sign-in";
 import { DialogService } from '../../common/dialog';
-import { JwtSessionManager } from '../../shared/auth/jwt-session-manager';
+import { JwtSessionManager } from 'radweb';
 
 
 @Component({

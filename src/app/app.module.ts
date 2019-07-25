@@ -36,7 +36,7 @@ import { BusyService } from './common/busy-service';
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
 import { InputAreaComponent } from './common/input-area/input-area.component';
 import { SelectPopupComponent } from './common/select-popup/select-popup.component';
-import { NotLoggedInGuard, AuthorizedGuard, JwtSessionManager } from './shared/auth/jwt-session-manager';
+import { NotLoggedInGuard, AuthorizedGuard, JwtSessionManager } from 'radweb';
 
 
 
