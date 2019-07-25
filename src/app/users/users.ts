@@ -1,8 +1,8 @@
 import * as radweb from 'radweb';
-import { ColumnSetting, Entity } from "radweb";
-import { IdEntity, changeDate, Id, HasAsyncGetTheValue, checkForDuplicateValue, StringColumn, BoolColumn, updateSettings } from '../shared/types';
+import { ColumnSetting, Entity, IdEntity, IdColumn, checkForDuplicateValue, StringColumn, BoolColumn } from "radweb";
+import { changeDate } from '../shared/types';
 import { DataColumnSettings } from 'radweb';
-import { Context, MoreDataColumnSettings, EntityClass } from 'radweb';
+import { Context, EntityClass } from 'radweb';
 import { Roles } from './userInfo';
 
 
@@ -11,7 +11,7 @@ import { Roles } from './userInfo';
 
 @EntityClass
 export class Users extends IdEntity<UserId>  {
-  
+
     constructor(private context: Context) {
 
         super(new UserId(context), {
@@ -36,7 +36,7 @@ export class Users extends IdEntity<UserId>  {
             apiDataFilter: () => {
                 if (!context.isLoggedIn())
                     return this.id.isEqualTo("No User");
-                else if (!(context.hasRole(Roles.superAdmin) ))
+                else if (!(context.hasRole(Roles.superAdmin)))
                     return this.id.isEqualTo(this.context.user.id);
             }
         });
@@ -49,7 +49,7 @@ export class Users extends IdEntity<UserId>  {
                 this.name.error = 'Name is too short';
         }
     });
-    
+
     realStoredPassword = new StringColumn({
         dbName: 'password',
         excludeFromApi: true
@@ -57,15 +57,15 @@ export class Users extends IdEntity<UserId>  {
     password = new radweb.StringColumn({ caption: 'password', inputType: 'password', virtualData: () => this.realStoredPassword.value ? Users.emptyPassword : '' });
 
     createDate = new changeDate('Create Date');
-    
-    
-    
+
+
+
     admin = new BoolColumn();
     static passwordHelper: PasswordHelper = {
         generateHash: x => { throw ""; },
         verify: (x, y) => { throw ""; }
     };
- 
+
 }
 export interface PasswordHelper {
     generateHash(password: string): string;
@@ -73,7 +73,7 @@ export interface PasswordHelper {
 }
 
 
-export class UserId extends Id implements HasAsyncGetTheValue {
+export class UserId extends IdColumn {
 
     constructor(private context: Context, settingsOrCaption?: DataColumnSettings<string, StringColumn> | string) {
         super(settingsOrCaption);
@@ -81,38 +81,18 @@ export class UserId extends Id implements HasAsyncGetTheValue {
     getColumn(): ColumnSetting<Entity<any>> {
         return {
             column: this,
-            getValue: f => (f ? (<UserId>(f).__getColumn(this)) : this).getValue(),
+            getValue: f => (f ? ((f).__getColumn(this)) : this).displayValue,
             hideDataOnInput: true,
             readonly: this.readonly,
             width: '200'
 
         }
     }
-
-    getValue() {
+    get displayValue() {
         return this.context.for(Users).lookup(this).name.value;
     }
-   
-    async getTheName() {
-        let r = await this.context.for(Users).lookupAsync(this);
-        if (r && r.name && r.name.value)
-            return r.name.value;
-        return '';
-    }
-    async getTheValue() {
-        let r = await this.context.for(Users).lookupAsync(this);
-        if (r && r.name && r.name.value )
-            return r.name.value ;
-        return '';
-    }
+
+
+
 }
 
-export class UserIdReadonly extends UserId {
-    constructor(private myContext: Context, caption: MoreDataColumnSettings<string, UserId> | string) {
-        super(myContext, updateSettings(caption, x => x.readonly = true));
-    }
-
-    get displayValue() {
-        return this.myContext.for(Users).lookup(this).name.value;
-    }
-}
