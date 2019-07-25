@@ -1,7 +1,7 @@
-import {  Roles } from './userInfo';
+import { UserInfo, Roles } from './userInfo';
 import { JWTCookieAuthorizationHelper } from './jwt-cookie-authoerization-helper';
 import { RunOnServer } from './server-action';
-import { Context,UserInfo } from '../context';
+import { Context } from '../context';
 import { Users } from '../../users/users';
 export class ServerSignIn {
     static helper: JWTCookieAuthorizationHelper<UserInfo>;

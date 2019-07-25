@@ -45,7 +45,7 @@ export class UsersComponent implements OnInit {
     });
 
   }
-  @RunOnServer({ allowed: c => c.hasRole(Roles.superAdmin) })
+  @RunOnServer({ allowed: c => c.isAdmin() })
   static async resetPassword(helperId: string, context?: Context) {
 
     await context.for(Users).foreach(h => h.id.isEqualTo(helperId), async h => {

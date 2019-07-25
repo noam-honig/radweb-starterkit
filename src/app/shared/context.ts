@@ -3,7 +3,7 @@ import { EntitySourceFindOptions, FilterBase, FindOptionsPerEntity, DataProvider
 import { foreachSync } from "./utils";
 import { Injectable } from "@angular/core";
 import { DataApiSettings } from "radweb";
-
+import { Roles, UserInfo } from './auth/userInfo';
 import { SiteArea } from 'radweb-server';
 
 
@@ -13,12 +13,17 @@ export class Context {
         this.cache = {};
         this._lookupCache = new stamEntity();
     }
-
+    isAdmin() {
+        return this.hasRole(Roles.superAdmin);
+    }
     isLoggedIn() {
         return !!this.user;
     }
     constructor() {
+
     }
+
+
 
     protected _dataSource: DataProviderFactory = new RestDataProvider(Context.apiBaseUrl);
     protected _onServer = false;
@@ -310,8 +315,3 @@ export function EntityClass(theEntityClass: EntityType) {
     return f;
 }
 
-export interface UserInfo {
-    id: string;
-    name: String;
-    roles: string[];
-}

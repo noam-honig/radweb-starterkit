@@ -7,8 +7,8 @@ import 'reflect-metadata';
 
 import { PostgresDataProvider } from "radweb-server-postgres";
 
-import { ServerContext, Context,UserInfo } from '../context';
-
+import { ServerContext, Context } from '../context';
+import { UserInfo } from './userInfo';
 import { SiteArea } from 'radweb-server';
 
 
