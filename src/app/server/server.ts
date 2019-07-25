@@ -12,7 +12,7 @@ import { Context, UserInfo } from "radweb";
 import { registerEntitiesOnServer } from "radweb-server";
 
 
-import { ServerSignIn } from "../shared/auth/server-sign-in";
+import { ServerSignIn } from "../users/server-sign-in";
 import { JWTCookieAuthorizationHelper } from 'radweb-server';
 
 serverInit().then(async (dataSource) => {

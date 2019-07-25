@@ -1,8 +1,8 @@
 import { Roles } from './userInfo';
 import { JWTCookieAuthorizationHelper } from 'radweb-server';
-import { RunOnServer } from './server-action';
+import { RunOnServer } from '../shared/auth/server-action';
 import { UserInfo, Context } from 'radweb';
-import { Users } from '../../users/users';
+import { Users } from './users';
 export class ServerSignIn {
     static helper: JWTCookieAuthorizationHelper<UserInfo>;
     @RunOnServer({ allowed: () => true })

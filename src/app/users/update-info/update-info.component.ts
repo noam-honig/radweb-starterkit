@@ -3,7 +3,7 @@ import { StringColumn } from 'radweb';
 import { Context } from 'radweb';
 import { Users } from '../users';
 
-import { ServerSignIn } from "../../shared/auth/server-sign-in";
+import { ServerSignIn } from "../server-sign-in";
 import { DialogService } from '../../common/dialog';
 import { JwtSessionManager } from 'radweb';
 

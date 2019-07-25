@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Users } from './users';
 import { Context } from 'radweb';
 import { RunOnServer } from '../shared/auth/server-action';
-import { Roles } from '../shared/auth/userInfo';
+import { Roles } from './userInfo';
 import { DialogService } from '../common/dialog';
 
 

@@ -5,7 +5,7 @@ import { Route } from '@angular/router';
 import { Context } from 'radweb';
 import { Users } from '../users';
 
-import { ServerSignIn } from "../../shared/auth/server-sign-in";
+import { ServerSignIn } from "../server-sign-in";
 import { JwtSessionManager } from 'radweb';
 
 

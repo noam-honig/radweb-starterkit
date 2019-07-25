@@ -28,7 +28,7 @@ import { HomeComponent } from './home/home.component';
 
 import { WaitComponent } from './shared/wait/wait.component';
 
-import { MyRouterService } from './shared/my-router-service';
+import { NavigateToComponentRouteService } from 'radweb';
 import { SignInComponent } from './common/sign-in/sign-in.component';
 
 import { DialogService } from './common/dialog';
@@ -83,7 +83,7 @@ import { NotLoggedInGuard, AuthorizedGuard, JwtSessionManager } from 'radweb';
     BusyService,
     
     Context,
-    MyRouterService,
+    NavigateToComponentRouteService,
     SelectPopupComponent,
     InputAreaComponent
   ],

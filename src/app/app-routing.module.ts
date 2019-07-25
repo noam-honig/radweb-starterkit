@@ -7,7 +7,7 @@ import { RegisterComponent } from './users/register/register.component';
 import { UpdateInfoComponent } from './users/update-info/update-info.component';
 
 import { UsersComponent } from './users/users.component';
-import { Roles } from './shared/auth/userInfo';
+import { Roles } from './users/userInfo';
 import { AuthorizedGuard, NotLoggedInGuard } from 'radweb';
 
 const routes: AuthorizedGuardRoute[] = [

@@ -3,7 +3,8 @@ import { ColumnSetting, Entity } from "radweb";
 import { IdEntity, changeDate, Id, HasAsyncGetTheValue, checkForDuplicateValue, StringColumn, BoolColumn, updateSettings } from '../shared/types';
 import { DataColumnSettings } from 'radweb';
 import { Context, MoreDataColumnSettings, EntityClass } from 'radweb';
-import { Roles } from '../shared/auth/userInfo';
+import { Roles } from './userInfo';
+
 
 
 
