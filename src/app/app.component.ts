@@ -4,13 +4,13 @@ import { MatSidenav } from '@angular/material';
 import { MatDialog } from '@angular/material/dialog';
 
 
-import { Context } from 'radweb';
+import { Context, RouteHelperService } from 'radweb';
 
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
 
 import { DialogService } from './common/dialog';
-import { JwtSessionManager,canNavigateToRoute } from 'radweb';
+import { JwtSessionManager } from 'radweb';
 
 @Component({
   selector: 'app-root',
@@ -21,15 +21,15 @@ export class AppComponent {
 
 
   constructor(
-    public auth: JwtSessionManager,
+    public sessionManager: JwtSessionManager,
     public router: Router,
     public activeRoute: ActivatedRoute,
-    private injector: Injector,
     private dialog: MatDialog,
+    private routeHelper: RouteHelperService,
 
     public dialogService: DialogService,
     public context: Context) {
-    auth.loadSessionFromCookie();
+    sessionManager.loadSessionFromCookie();
 
   }
   signInText() {
@@ -41,7 +41,7 @@ export class AppComponent {
     if (!this.context.user) {
       this.dialog.open(SignInComponent);
     } else {
-      this.dialogService.YesNoQuestion("Would you like to sign out?", () => { this.auth.signout() });
+      this.dialogService.YesNoQuestion("Would you like to sign out?", () => { this.sessionManager.signout() });
     }
   }
 
@@ -68,12 +68,12 @@ export class AppComponent {
   signOut() {
 
     this.routeClicked();
-    this.auth.signout();
+    this.sessionManager.signout();
   }
   shouldDisplayRoute(route: Route) {
     if (!(route.path && route.path.indexOf(':') < 0 && route.path.indexOf('**') < 0))
       return false;
-    return canNavigateToRoute(route);
+    return this.routeHelper.canNavigateToRoute(route);
   }
   @ViewChild('sidenav') sidenav: MatSidenav;
   routeClicked() {
