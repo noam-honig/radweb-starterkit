@@ -5,8 +5,6 @@ import { config } from 'dotenv';
 import { PostgresDataProvider, PostgrestSchemaBuilder } from 'radweb-server-postgres';
 import * as passwordHash from 'password-hash';
 
-import { foreachSync } from '../shared/utils';
-import { ServerContext, allEntities } from 'radweb';
 import '../app.module';
 
 import { ActualSQLServerDataProvider } from 'radweb-server';
@@ -32,21 +30,13 @@ export async function serverInit() {
         connectionString: dbUrl,
         ssl: ssl
     });
-    
+
 
     Users.passwordHelper = {
         generateHash: p => passwordHash.generate(p),
         verify: (p, h) => passwordHash.verify(p, h)
     }
-
-    let context = new ServerContext();
-    var sb = new PostgrestSchemaBuilder(pool);
-    await foreachSync(allEntities.map(x => context.for(x).create()), async x => {
-        if (x.__getDbName().toLowerCase().indexOf('from ') < 0) {
-            await sb.CreateIfNotExist(x);
-            await sb.verifyAllColumns(x);
-        }
-    });
+    await new PostgrestSchemaBuilder(pool).verifyStructureOfAllEntities();
     return new PostgresDataProvider(pool);
 
 
