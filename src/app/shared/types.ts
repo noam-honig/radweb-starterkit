@@ -75,7 +75,7 @@ export class changeDate extends DateTimeColumn implements hasMoreDataColumnSetti
   __getMoreDataColumnSettings(): MoreDataColumnSettings<any, any> {
     return this.optionsOrCaption as MoreDataColumnSettings<any, any>;
   }
-  constructor(private optionsOrCaption: MoreDataColumnSettings<string, DateTimeColumn> | string) {
+  constructor(private optionsOrCaption: MoreDataColumnSettings<Date, DateTimeColumn> | string) {
     super(updateSettings(optionsOrCaption, x => x.readonly = true));
   }
 

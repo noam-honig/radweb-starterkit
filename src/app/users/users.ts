@@ -29,7 +29,7 @@ export class Users extends IdEntity<UserId>  {
 
                     await checkForDuplicateValue(this, this.name);
                     if (this.isNew())
-                        this.createDate.dateValue = new Date();
+                        this.createDate.value = new Date();
                 }
             },
             apiDataFilter: () => {
