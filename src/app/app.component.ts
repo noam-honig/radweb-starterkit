@@ -8,9 +8,9 @@ import { Context } from 'radweb';
 
 
 import { SignInComponent } from './common/sign-in/sign-in.component';
-import { dummyRoute } from 'radweb';
+
 import { DialogService } from './common/dialog';
-import { JwtSessionManager } from 'radweb';
+import { JwtSessionManager,canNavigateToRoute } from 'radweb';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +26,7 @@ export class AppComponent {
     public activeRoute: ActivatedRoute,
     private injector: Injector,
     private dialog: MatDialog,
-    
+
     public dialogService: DialogService,
     public context: Context) {
     auth.loadSessionFromCookie();
@@ -73,19 +73,7 @@ export class AppComponent {
   shouldDisplayRoute(route: Route) {
     if (!(route.path && route.path.indexOf(':') < 0 && route.path.indexOf('**') < 0))
       return false;
-    if (!route.canActivate)
-      return true;
-    for (let guard of route.canActivate) {
-      let g = this.injector.get(guard) as CanActivate;
-      if (g && g.canActivate) {
-        var r = new dummyRoute();
-        r.routeConfig = route;
-        let canActivate = g.canActivate(r, undefined);
-        if (!canActivate)
-          return false;
-      }
-    }
-    return true;
+    return canNavigateToRoute(route);
   }
   @ViewChild('sidenav') sidenav: MatSidenav;
   routeClicked() {
