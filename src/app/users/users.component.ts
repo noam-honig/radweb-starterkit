@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Users } from './users';
 import { Context } from 'radweb';
-import { RunOnServer } from '../shared/auth/server-action';
-import { Roles } from './userInfo';
+import { RunOnServer } from 'radweb';
+  
 import { DialogService } from '../common/dialog';
+import { Roles } from './userInfo';
 
 
 @Component({
@@ -14,9 +15,9 @@ import { DialogService } from '../common/dialog';
 export class UsersComponent implements OnInit {
   constructor(private dialog: DialogService, public context: Context) {
   }
- isAdmin(){
-   return this.context.hasRole(Roles.superAdmin);
- }
+  isAdmin() {
+    return this.context.hasRole(Roles.superAdmin);
+  }
 
   users = this.context.for(Users).gridSettings({
     allowDelete: true,
@@ -25,18 +26,18 @@ export class UsersComponent implements OnInit {
     numOfColumnsInGrid: 2,
     get: {
       orderBy: h => [h.name],
-      limit:100
+      limit: 100
     },
     columnSettings: users => [
       users.name
-      
+
 
     ],
     confirmDelete: (h, yes) => this.dialog.confirmDelete(h.name.value, yes),
-    
+
 
   });
-  
+
 
   resetPassword() {
     this.dialog.YesNoQuestion("Are you sure you want to delete the password of " + this.users.currentRow.name.value, async () => {

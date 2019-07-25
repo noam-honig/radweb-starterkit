@@ -6,7 +6,7 @@ import * as compression from 'compression';
 import { ExpressBridge } from 'radweb-server';
 import * as fs from 'fs';
 import { serverInit } from './serverInit';
-import { registerActionsOnServer } from "../shared/auth/server-action";
+import { registerActionsOnServer } from "radweb-server";
 import '../app.module';
 import { Context, UserInfo } from "radweb";
 import { registerEntitiesOnServer } from "radweb-server";

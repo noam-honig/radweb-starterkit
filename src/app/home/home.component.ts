@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RunOnServer } from '../shared/auth/server-action';
+import { RunOnServer } from 'radweb';
 import { Context } from 'radweb';
 
 @Component({

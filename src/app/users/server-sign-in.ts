@@ -1,6 +1,6 @@
 import { Roles } from './userInfo';
 import { JWTCookieAuthorizationHelper } from 'radweb-server';
-import { RunOnServer } from '../shared/auth/server-action';
+import { RunOnServer } from 'radweb';
 import { UserInfo, Context } from 'radweb';
 import { Users } from './users';
 export class ServerSignIn {
