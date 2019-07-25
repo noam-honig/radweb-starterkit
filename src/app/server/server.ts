@@ -1,4 +1,5 @@
-
+import {CustomModuleLoader} from '../../../../radweb/src/app/server/CustomModuleLoader';
+let moduleLoader = new CustomModuleLoader('/dist-server/radweb');
 import * as express from 'express';
 import * as secure from 'express-force-https';
 import * as compression from 'compression';

@@ -11,7 +11,7 @@
     "server:build": "tsc -p tsconfig.server.json",
     "server:build-watch": "tsc -p tsconfig.server.json --watch",
     "server:execute": "node dist-server/server/server.js",
-    "server:debug": "node --inspect --debug-brk dist-server/server/server.js",
+    "server:debug": "node --inspect --debug-brk dist-server/radweb-starterkit/src/app/server/server.js",
     "RunSomething": "node --inspect --debug-brk dist-server/server/doSomething.js",
     "test": "ng test",
     "lint": "ng lint",
@@ -47,13 +47,10 @@
     "password-hash": "^1.2.2",
     "path": "^0.12.7",
     "pg": "^7.6.1",
-    "radweb": "^2.0.6",
-    "radweb-server": "0.0.1",
-    "radweb-server-postgres": "0.0.1",
     "reflect-metadata": "^0.1.12",
     "rxjs": "~6.3.3",
-    "uuid": "^3.3.2",
     "tslib": "^1.9.0",
+    "uuid": "^3.3.2",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
