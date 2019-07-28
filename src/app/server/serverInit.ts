@@ -30,8 +30,6 @@ export async function serverInit() {
         connectionString: dbUrl,
         ssl: ssl
     });
-
-
     Users.passwordHelper = {
         generateHash: p => passwordHash.generate(p),
         verify: (p, h) => passwordHash.verify(p, h)

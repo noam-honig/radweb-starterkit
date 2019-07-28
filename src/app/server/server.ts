@@ -1,15 +1,10 @@
 import { CustomModuleLoader } from '../../../../radweb/src/app/server/CustomModuleLoader';
 let moduleLoader = new CustomModuleLoader('/dist-server/radweb');
 import * as express from 'express';
-import * as secure from 'express-force-https';
-import * as compression from 'compression';
 import { ExpressBridge } from 'radweb-server';
 import * as fs from 'fs';
 import { serverInit } from './serverInit';
-import { registerActionsOnServer } from "radweb-server";
 import '../app.module';
-import { Context, UserInfo } from "radweb";
-import { registerEntitiesOnServer } from "radweb-server";
 
 
 import { ServerSignIn } from "../users/server-sign-in";
@@ -18,20 +13,8 @@ import { JWTCookieAuthorizationHelper } from 'radweb-server';
 serverInit().then(async (dataSource) => {
 
     let app = express();
-    app.use(compression());
-
-    if (!process.env.DISABLE_HTTPS)
-        app.use(secure);
-
-    let eb = new ExpressBridge<UserInfo>(app);
-
-    var tokenSignKey = process.env.TOKEN_SIGN_KEY;
-    ServerSignIn.helper = new JWTCookieAuthorizationHelper<UserInfo>(eb, tokenSignKey);
-
-    let apiArea = eb.addArea('/' + Context.apiBaseUrl);
-
-    registerActionsOnServer(apiArea, dataSource);
-    registerEntitiesOnServer(apiArea, dataSource);
+    let eb = new ExpressBridge(app, dataSource, process.env.DISABLE_HTTPS == "true");
+    ServerSignIn.helper = new JWTCookieAuthorizationHelper(eb, process.env.TOKEN_SIGN_KEY);
 
     app.use(express.static('dist'));
 

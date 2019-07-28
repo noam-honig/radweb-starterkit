@@ -76,14 +76,10 @@ import { NotLoggedInGuard, AuthorizedGuard, JwtSessionManager } from 'radweb';
     RadWebModule
   ],
   providers: [
-    NotLoggedInGuard,
-    AuthorizedGuard,
-    JwtSessionManager,
+    
     DialogService,
     BusyService,
     
-    Context,
-    RouteHelperService,
     SelectPopupComponent,
     InputAreaComponent
   ],
