@@ -45,6 +45,7 @@ export class Users extends IdEntity<UserId>  {
     name = new radweb.StringColumn({
         caption: "name",
         onValidate: v => {
+
             if (!v.value || v.value.length < 2)
                 this.name.error = 'Name is too short';
         }

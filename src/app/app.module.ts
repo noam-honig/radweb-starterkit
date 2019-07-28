@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injectable } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -25,8 +25,17 @@ import { BusyService } from './common/busy-service';
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
 import { InputAreaComponent } from './common/input-area/input-area.component';
 import { SelectPopupComponent } from './common/select-popup/select-popup.component';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-
+@Injectable()
+export class LoaderInterceptor implements HttpInterceptor {
+  constructor() { }
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    console.log(req.urlWithParams);
+    return next.handle(req);
+  }
+}
 
 
 
@@ -34,7 +43,7 @@ import { SelectPopupComponent } from './common/select-popup/select-popup.compone
   declarations: [
     AppComponent,
     UsersComponent,
-    
+
     UpdateInfoComponent,
     RegisterComponent,
     WaitComponent,
@@ -58,22 +67,24 @@ import { SelectPopupComponent } from './common/select-popup/select-popup.compone
     MatProgressSpinnerModule,
     MatCardModule,
     MatDialogModule,
-    MatSnackBarModule, 
+    MatSnackBarModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
     RadWebModule
   ],
   providers: [
-    
-    
+
+
     DialogService,
     BusyService,
-    
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
     SelectPopupComponent,
     InputAreaComponent
   ],
-  entryComponents:[WaitComponent,YesNoQuestionComponent,SignInComponent],
+  entryComponents: [WaitComponent, YesNoQuestionComponent, SignInComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+

@@ -5,8 +5,7 @@ import { DataProviderFactory, RestDataProvider } from 'radweb';
 // The list of file replacements can be found in `angular.json`.
 export const environment = {
   production: false,
-  dataSource: new RestDataProvider('/dataapi') as DataProviderFactory,
-};
+  };
 
 /*
  * For easier debugging in development mode, you can import the following file
