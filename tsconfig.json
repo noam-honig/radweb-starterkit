@@ -30,7 +30,8 @@
       ],
       "radweb-server-postgres": [
         "../radweb/projects/radweb-server-postgres"
-      ],
+      ]
+      
     },
   }
 }

@@ -1,4 +1,4 @@
-import { AuthorizedGuardRoute } from 'radweb';
+import { AuthorizedGuardRoute, RadWebModule } from 'radweb';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, Route, ActivatedRouteSnapshot } from '@angular/router';
 import { HomeComponent } from './home/home.component';
@@ -22,7 +22,7 @@ const routes: AuthorizedGuardRoute[] = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes),RadWebModule],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
