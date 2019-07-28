@@ -4,7 +4,7 @@ import { RunOnServer } from 'radweb';
 import { UserInfo, Context } from 'radweb';
 import { Users } from './users';
 export class ServerSignIn {
-    static helper: JWTCookieAuthorizationHelper<UserInfo>;
+    static helper: JWTCookieAuthorizationHelper;
     @RunOnServer({ allowed: () => true })
     static async signIn(user: string, password: string, context?: Context) {
         let result: UserInfo;
