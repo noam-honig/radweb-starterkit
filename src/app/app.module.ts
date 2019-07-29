@@ -78,7 +78,7 @@ export class LoaderInterceptor implements HttpInterceptor {
 
     DialogService,
     BusyService,
-    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true },
+
     SelectPopupComponent,
     InputAreaComponent
   ],

@@ -19,18 +19,12 @@
       "dom"
     ],
     "paths": {
-      "radweb": [
-        "../radweb/projects/radweb/src/public_api"
+      "radwe*": [
+        "../radweb/projects/radwe*"
       ],
-      "radweb-server": [
-        "../radweb/projects/radweb-server"
-      ],
-      "radweb-server-postgres": [
-        "../radweb/projects/radweb-server-postgres"
-      ],
-      "radweb/*": [
-        "../radweb/projects/radweb/src/*"
-      ],
+      "*":[
+        "node_modules/*"
+      ]
     }
   },
   "files": [
