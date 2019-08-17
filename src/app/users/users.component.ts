@@ -4,7 +4,7 @@ import { Context } from 'radweb';
 import { RunOnServer } from 'radweb';
   
 import { DialogService } from '../common/dialog';
-import { Roles } from './userInfo';
+import { Roles } from './roles';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class UsersComponent implements OnInit {
   constructor(private dialog: DialogService, public context: Context) {
   }
   isAdmin() {
-    return this.context.isAllowed(Roles.superAdmin);
+    return this.context.isAllowed(Roles.admin);
   }
 
   users = this.context.for(Users).gridSettings({
@@ -46,7 +46,7 @@ export class UsersComponent implements OnInit {
     });
 
   }
-  @RunOnServer({ allowed: c => c.isAllowed(Roles.superAdmin) })
+  @RunOnServer({ allowed: c => c.isAllowed(Roles.admin) })
   static async resetPassword(helperId: string, context?: Context) {
 
     await context.for(Users).foreach(h => h.id.isEqualTo(helperId), async h => {

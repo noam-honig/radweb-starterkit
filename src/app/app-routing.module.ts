@@ -7,12 +7,12 @@ import { RegisterComponent } from './users/register/register.component';
 import { UpdateInfoComponent } from './users/update-info/update-info.component';
 
 import { UsersComponent } from './users/users.component';
-import { Roles, SuperAdminGuard } from './users/userInfo';
+import { Roles, AdminGuard } from './users/roles';
 
 
 const routes: Routes = [
   { path: 'Home', component: HomeComponent },
-  { path: 'User Accounts', component: UsersComponent, canActivate: [SuperAdminGuard] },
+  { path: 'User Accounts', component: UsersComponent, canActivate: [AdminGuard] },
 
   { path: 'Register', component: RegisterComponent, canActivate: [NotSignedInGuard] },
   { path: 'Account Info', component: UpdateInfoComponent, canActivate: [NotSignedInGuard] },
@@ -23,7 +23,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes), RadWebModule],
-  providers: [SuperAdminGuard],
+  providers: [AdminGuard],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

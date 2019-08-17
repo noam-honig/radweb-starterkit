@@ -3,7 +3,7 @@ import { ColumnSetting, Entity, IdEntity, IdColumn, checkForDuplicateValue, Stri
 import { changeDate } from '../shared/types';
 import { DataColumnSettings } from 'radweb';
 import { Context, EntityClass } from 'radweb';
-import { Roles } from './userInfo';
+import { Roles } from './roles';
 
 
 
@@ -36,7 +36,7 @@ export class Users extends IdEntity<UserId>  {
             apiDataFilter: () => {
                 if (!context.isSignedIn())
                     return this.id.isEqualTo("No User");
-                else if (!(context.isAllowed(Roles.superAdmin)))
+                else if (!(context.isAllowed(Roles.admin)))
                     return this.id.isEqualTo(this.context.user.id);
             }
         });

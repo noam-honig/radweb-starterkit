@@ -1,4 +1,4 @@
-import { Roles } from './userInfo';
+import { Roles } from './roles';
 import { JWTCookieAuthorizationHelper } from 'radweb-server';
 import { RunOnServer } from 'radweb';
 import { UserInfo, Context } from 'radweb';
@@ -16,7 +16,7 @@ export class ServerSignIn {
                     name: h.name.value
                 };
                 if (h.admin.value) {
-                    result.roles.push(Roles.superAdmin);
+                    result.roles.push(Roles.admin);
                 }
             }
         });

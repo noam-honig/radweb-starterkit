@@ -4,14 +4,14 @@ import { Injectable } from '@angular/core';
 
 
 export const Roles = { 
-    superAdmin: 'SuperAdmin'
+    admin: 'admin'
 }
 
 
 @Injectable()
-export class SuperAdminGuard extends SignedInGuard {
+export class AdminGuard extends SignedInGuard {
 
     isAllowed() {
-        return Roles.superAdmin;
+        return Roles.admin;
     }
 }
