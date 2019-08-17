@@ -1,5 +1,5 @@
 import * as radweb from 'radweb';
-import { ColumnSetting, Entity, IdEntity, IdColumn, checkForDuplicateValue, StringColumn, BoolColumn } from "radweb";
+import { ColumnSetting, Entity, IdEntity, IdColumn, checkForDuplicateValue, StringColumn, BoolColumn, ColumnOptions } from "radweb";
 import { changeDate } from '../shared/types';
 import { DataColumnSettings } from 'radweb';
 import { Context, EntityClass } from 'radweb';
@@ -17,8 +17,8 @@ export class Users extends IdEntity<UserId>  {
         super(new UserId(context), {
             name: "Users",
             allowApiRead: true,
-            allowApiDelete: context.isLoggedIn(),
-            allowApiUpdate: context.isLoggedIn(),
+            allowApiDelete: context.isSignedIn(),
+            allowApiUpdate: context.isSignedIn(),
             allowApiInsert: true,
             onSavingRow: async () => {
                 if (context.onServer) {
@@ -34,9 +34,9 @@ export class Users extends IdEntity<UserId>  {
                 }
             },
             apiDataFilter: () => {
-                if (!context.isLoggedIn())
+                if (!context.isSignedIn())
                     return this.id.isEqualTo("No User");
-                else if (!(context.hasRole(Roles.superAdmin)))
+                else if (!(context.isAllowed(Roles.superAdmin)))
                     return this.id.isEqualTo(this.context.user.id);
             }
         });
@@ -44,16 +44,16 @@ export class Users extends IdEntity<UserId>  {
     public static emptyPassword = 'password';
     name = new radweb.StringColumn({
         caption: "name",
-        onValidate: v => {
+        onValidate: () => {
 
-            if (!v.value || v.value.length < 2)
+            if (!this.name.value || this.name.value.length < 2)
                 this.name.error = 'Name is too short';
         }
     });
 
     realStoredPassword = new StringColumn({
         dbName: 'password',
-        excludeFromApi: true
+        includeInApi: false
     });
     password = new radweb.StringColumn({ caption: 'password', inputType: 'password', virtualData: () => this.realStoredPassword.value ? Users.emptyPassword : '' });
 
@@ -76,7 +76,7 @@ export interface PasswordHelper {
 
 export class UserId extends IdColumn {
 
-    constructor(private context: Context, settingsOrCaption?: DataColumnSettings<string, StringColumn> | string) {
+    constructor(private context: Context, settingsOrCaption?: ColumnOptions<string>) {
         super(settingsOrCaption);
     }
     getColumn(): ColumnSetting<Entity<any>> {
@@ -84,7 +84,7 @@ export class UserId extends IdColumn {
             column: this,
             getValue: f => (f ? ((f).__getColumn(this)) : this).displayValue,
             hideDataOnInput: true,
-            readonly: this.readonly,
+            readonly: this.context.isAllowed(this.allowApiUpdate),
             width: '200'
 
         }

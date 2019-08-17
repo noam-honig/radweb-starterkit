@@ -16,7 +16,7 @@ export class UsersComponent implements OnInit {
   constructor(private dialog: DialogService, public context: Context) {
   }
   isAdmin() {
-    return this.context.hasRole(Roles.superAdmin);
+    return this.context.isAllowed(Roles.superAdmin);
   }
 
   users = this.context.for(Users).gridSettings({
@@ -46,7 +46,7 @@ export class UsersComponent implements OnInit {
     });
 
   }
-  @RunOnServer({ allowed: c => c.hasRole(Roles.superAdmin) })
+  @RunOnServer({ allowed: c => c.isAllowed(Roles.superAdmin) })
   static async resetPassword(helperId: string, context?: Context) {
 
     await context.for(Users).foreach(h => h.id.isEqualTo(helperId), async h => {
