@@ -29,13 +29,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HTTP_INTERCEPTORS
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class LoaderInterceptor implements HttpInterceptor {
-  constructor() { }
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(req.urlWithParams);
-    return next.handle(req);
-  }
-}
+
 
 
 
