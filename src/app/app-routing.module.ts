@@ -1,4 +1,4 @@
-import { RadWebModule, NotSignedInGuard } from 'radweb';
+import { RadWebModule, NotSignedInGuard, SignedInGuard } from 'radweb';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, Route, ActivatedRouteSnapshot } from '@angular/router';
 import { HomeComponent } from './home/home.component';
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'User Accounts', component: UsersComponent, canActivate: [AdminGuard] },
 
   { path: 'Register', component: RegisterComponent, canActivate: [NotSignedInGuard] },
-  { path: 'Account Info', component: UpdateInfoComponent, canActivate: [NotSignedInGuard] },
+  { path: 'Account Info', component: UpdateInfoComponent, canActivate: [SignedInGuard] },
   { path: '', redirectTo: '/Home', pathMatch: 'full' },
   { path: '**', redirectTo: '/Home', pathMatch: 'full' }
 

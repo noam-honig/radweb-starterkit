@@ -29,7 +29,8 @@ export class UsersComponent implements OnInit {
       limit: 100
     },
     columnSettings: users => [
-      users.name
+      users.name,
+      users.admin
 
 
     ],
