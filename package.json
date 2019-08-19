@@ -4,10 +4,11 @@
   "scripts": {
     "ng": "ng",
     "gc": "ng generate component --skipTests=true",
-    "start": "ng serve",
+    "start": "npm run server:execute",
+    "ng-serve": "ng serve",
     "start-ip-10.0.0.6": "ng serve --host 10.0.0.6",
     "build": "npm run server:build && npm run ng-build",
-    "ng-build": "ng build",
+    "ng-build": "ng build  --prod",
     "server:build": "tsc -p tsconfig.server.json",
     "server:build-watch": "tsc -p tsconfig.server.json --watch",
     "server:execute": "node dist-server/server/server.js",

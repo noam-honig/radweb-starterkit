@@ -23,6 +23,7 @@ import { DialogService } from './common/dialog';
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
 import { InputAreaComponent } from './common/input-area/input-area.component';
 import { SelectPopupComponent } from './common/select-popup/select-popup.component';
+import { AdminGuard } from './users/roles';
 
 
 @Injectable()
@@ -62,15 +63,10 @@ import { SelectPopupComponent } from './common/select-popup/select-popup.compone
     RadWebModule
   ],
   providers: [
-
-
     DialogService,
-
-
-    SelectPopupComponent,
-    InputAreaComponent
+    AdminGuard
   ],
-  entryComponents: [YesNoQuestionComponent, SignInComponent, SelectPopupComponent],
+  entryComponents: [YesNoQuestionComponent, SignInComponent, SelectPopupComponent,InputAreaComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
