@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 
 
 
-export const Roles = { 
-    admin: 'admin'
+export class Roles {
+    static admin = 'admin';
 }
 
 
